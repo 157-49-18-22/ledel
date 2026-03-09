@@ -1,0 +1,98 @@
+.quality-section {
+    background: var(--dark-bg);
+}
+
+.quality-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.quality-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.quality-card {
+    padding: 30px;
+    border-radius: 20px;
+    transition: all 0.3s;
+}
+
+.quality-card:hover {
+    transform: translateX(10px);
+    border-color: var(--accent);
+}
+
+.q-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.q-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.q-desc {
+    color: var(--text-dim);
+    font-weight: 300;
+}
+
+.quality-visual {
+    background: linear-gradient(135deg, rgba(2, 195, 154, 0.05), var(--dark-card));
+    padding: 60px;
+    border-radius: 40px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+}
+
+.quality-visual::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(var(--accent-glow) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.1;
+}
+
+.blueprint-overlay {
+    position: relative;
+    z-index: 10;
+}
+
+.quality-badges {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.q-badge {
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .quality-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .quality-visual {
+        order: -1;
+    }
+}

@@ -1,0 +1,79 @@
+.tech-flow {
+    background: var(--dark-bg);
+}
+
+.flow-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px;
+    border-radius: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.flow-text {
+    color: var(--text-dim);
+    font-size: 1.25rem;
+    margin: 30px 0 50px;
+    font-weight: 300;
+}
+
+.flow-steps {
+    display: flex;
+    gap: 30px;
+}
+
+.step {
+    flex: 1;
+}
+
+.step-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'Space Grotesk';
+    display: block;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.step h4 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.flow-visual {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    padding: 20px;
+}
+
+.flow-visual img {
+    width: 100%;
+    height: auto;
+    filter: contrast(1.1);
+}
+
+.visual-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, var(--dark-bg) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+    .flow-container {
+        grid-template-columns: 1fr;
+        padding: 40px;
+        gap: 50px;
+    }
+}

@@ -1,0 +1,102 @@
+@keyframes gridMove {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+.cta-section {
+    padding: 8rem 2rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none"/><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+}
+
+.cta-container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.cta-container h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 1.5rem;
+}
+
+.cta-container p {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-white-btn {
+    padding: 1.2rem 3rem;
+    background: white;
+    color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cta-white-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cta-secondary-btn {
+    padding: 1.2rem 3rem;
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cta-secondary-btn:hover {
+    background: white;
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .cta-container h2 {
+        font-size: 2rem;
+    }
+}

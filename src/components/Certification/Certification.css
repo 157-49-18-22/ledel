@@ -1,0 +1,58 @@
+.cert-section {
+    background: var(--dark-bg);
+}
+
+.cert-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+}
+
+.cert-content {
+    flex: 1;
+}
+
+.cert-text {
+    color: var(--text-dim);
+    margin-top: 20px;
+}
+
+.cert-logos {
+    flex: 1.2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.logo-placeholder {
+    height: 80px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk';
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    transition: all 0.3s;
+}
+
+.logo-placeholder:hover {
+    background: var(--glass);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+@media (max-width: 900px) {
+    .cert-container {
+        flex-direction: column;
+        text-align: center;
+    }
+}
