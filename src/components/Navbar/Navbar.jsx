@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Send } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -29,6 +30,7 @@ const Navbar = () => {
         <div className="nav-actions">
           <button className="btn-contact">
             Connect
+            <Send size={16} />
             <div className="btn-glow"></div>
           </button>
 

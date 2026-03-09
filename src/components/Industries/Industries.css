@@ -1,103 +1,251 @@
-.industries-premium {
-    background: var(--dark-bg);
-    border-top: 1px solid var(--glass-border);
+.industries-pro-section {
+    background: #02060e;
 }
 
-.industries-container-modern {
+.industries-bento-grid {
     max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 60px;
-}
-
-.side-label {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    text-transform: uppercase;
-    letter-spacing: 8px;
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    border-left: 1px solid var(--glass-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.5;
-}
-
-.industries-lead {
-    max-width: 600px;
-    color: var(--text-dim);
-    font-size: 1.2rem;
-    margin: 30px 0 60px;
-    font-weight: 300;
-}
-
-.industries-matrix {
+    margin: 60px auto 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 30px;
+    padding: 0 5%;
 }
 
-.ind-cell {
-    padding: 40px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+.sector-card-pro {
+    height: 450px;
+    background: #0a1120;
+    border-radius: 30px;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ind-cell:hover {
-    transform: scale(1.05);
-    border-color: #fff;
-}
-
-.ind-icon {
-    font-size: 3rem;
-    z-index: 10;
-}
-
-.ind-name {
-    font-family: 'Space Grotesk';
-    font-weight: 600;
-    font-size: 1.1rem;
-    z-index: 10;
-}
-
-.ind-glow {
+.card-bg-image {
     position: absolute;
-    bottom: -50px;
-    width: 100px;
-    height: 100px;
-    filter: blur(60px);
-    opacity: 0;
-    transition: opacity 0.4s;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
-.ind-cell:hover .ind-glow {
-    opacity: 0.4;
+.card-bg-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s;
+    opacity: 0.6;
 }
 
-@media (max-width: 1024px) {
-    .industries-matrix {
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(5, 9, 20, 0.95) 100%);
+    z-index: 2;
+}
+
+.sector-card-pro:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.sector-card-pro:hover .card-bg-image img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+.card-content-wrap {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.card-top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: auto;
+}
+
+.sector-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--accent);
+}
+
+.sector-badge span {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.status-indicator {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    background: rgba(2, 195, 154, 0.1);
+    padding: 5px 12px;
+    border-radius: 50px;
+}
+
+.dot.pulse {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Title Area */
+.industry-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.industry-brief {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Stats */
+.industry-stats-bar {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.stat-unit {
+    flex: 1;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.stat-value-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent);
+}
+
+.stat-v {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.stat-progress-bg {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.stat-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* Actions */
+.card-bottom-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-explore-sector {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: gap 0.3s;
+    padding: 0;
+}
+
+.btn-explore-sector:hover {
+    gap: 15px;
+    color: var(--accent);
+}
+
+.power-draw {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 1100px) {
+    .industries-bento-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .industries-container-modern {
+    .industries-bento-grid {
         grid-template-columns: 1fr;
     }
 
-    .side-label {
-        display: none;
-    }
-
-    .industries-matrix {
-        grid-template-columns: 1fr;
+    .sector-card-pro {
+        height: 420px;
     }
 }

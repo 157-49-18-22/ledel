@@ -5,10 +5,11 @@ import Services from './components/Services/Services';
 import Industries from './components/Industries/Industries';
 import Products from './components/Products/Products';
 import TechFlow from './components/TechFlow/TechFlow';
-import QualitySection from './components/QualitySection/QualitySection';
+
 import Certification from './components/Certification/Certification';
 import CTA from './components/CTA/CTA';
 import Footer from './components/Footer/Footer';
+import ScrollReveal from './components/ScrollReveal/ScrollReveal';
 import './App.css';
 
 function App() {
@@ -16,13 +17,31 @@ function App() {
     <div className="app">
       <Navbar />
       <Hero />
-      <Products />
-      <TechFlow />
-      <QualitySection />
-      <Services />
-      <Industries />
-      <Certification />
-      <CTA />
+
+      <ScrollReveal direction="right">
+        <Products />
+      </ScrollReveal>
+
+      <ScrollReveal direction="left">
+        <TechFlow />
+      </ScrollReveal>
+
+      <ScrollReveal direction="right">
+        <Services />
+      </ScrollReveal>
+
+      <ScrollReveal direction="left">
+        <Industries />
+      </ScrollReveal>
+
+      <ScrollReveal direction="right">
+        <Certification />
+      </ScrollReveal>
+
+      <ScrollReveal direction="left">
+        <CTA />
+      </ScrollReveal>
+
       <Footer />
     </div>
   );

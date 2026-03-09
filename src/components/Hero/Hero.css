@@ -140,7 +140,13 @@
 .metric {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
+    align-items: center;
+}
+
+.metric-icon {
+    color: var(--accent);
+    opacity: 0.8;
 }
 
 .metric-val {

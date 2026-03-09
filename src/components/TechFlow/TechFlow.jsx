@@ -1,37 +1,109 @@
 import React from 'react';
+import { Database, Cpu, Share2, Activity, ArrowRight, Binary, Settings } from 'lucide-react';
 import './TechFlow.css';
 
 const TechFlow = () => {
-    return (
-        <section className="tech-flow section-padding">
-            <div className="flow-container glass-morphism">
-                <div className="flow-content">
-                    <span className="accent-tag">Engineering Logic</span>
-                    <h2 className="title-large">From <span className="gradient-text">Concept to Grid</span></h2>
-                    <p className="flow-text">
-                        Our systems aren't just products; they are part of a closed-loop engineering ecosystem.
-                        We optimize every stage—from capture to utilization—ensuring maximum technical efficiency.
-                    </p>
+    const pipeline = [
+        {
+            id: '01',
+            title: 'Data Acquisition',
+            label: 'Edge Sensors',
+            desc: 'Multi-modal hardware capturing environmental flux and high-fidelity video streams.',
+            icon: <Database size={24} />
+        },
+        {
+            id: '02',
+            title: 'Neural Synthesis',
+            label: 'Edge Compute',
+            desc: 'Real-time object classification and data compression via local neural processing chips.',
+            icon: <Cpu size={24} />
+        },
+        {
+            id: '03',
+            title: 'Grid Integration',
+            label: 'Cloud Uplink',
+            desc: 'Seamless synchronization with centralized SCADA and smart city management protocols.',
+            icon: <Share2 size={24} />
+        },
+        {
+            id: '04',
+            title: 'Autonomous Logic',
+            label: 'Optimization',
+            desc: 'Closed-loop feedback systems adjusting hardware output based on AI-driven analytics.',
+            icon: <Settings size={24} />
+        }
+    ];
 
-                    <div className="flow-steps">
-                        <div className="step">
-                            <span className="step-num">01</span>
-                            <h4>Data Capture</h4>
-                        </div>
-                        <div className="step">
-                            <span className="step-num">02</span>
-                            <h4>Precision Compression</h4>
-                        </div>
-                        <div className="step">
-                            <span className="step-num">03</span>
-                            <h4>Grid Integration</h4>
-                        </div>
+    return (
+        <section id="tech-flow" className="tech-pipeline-section section-padding">
+            <div className="pipeline-bg-effects">
+                <div className="p-glow g-top"></div>
+                <div className="p-glow g-bottom"></div>
+            </div>
+
+            <div className="container">
+                <div className="pipeline-intro">
+                    <div className="p-badge">
+                        <Binary size={14} />
+                        <span>Industrial Protocol V4.2</span>
+                    </div>
+                    <h2 className="title-large">The Engineering <br /><span className="gradient-text">Synchronization Flow</span></h2>
+                    <p className="lead-text">
+                        We don't just manufacture hardware; we architect intelligent pipelines
+                        that optimize the path from data capture to autonomous grid response.
+                    </p>
+                </div>
+
+                <div className="pipeline-visual">
+                    <div className="pipeline-line-deco">
+                        <div className="flow-particle p1"></div>
+                        <div className="flow-particle p2"></div>
+                        <div className="flow-particle p3"></div>
+                    </div>
+
+                    <div className="pipeline-grid">
+                        {pipeline.map((step, i) => (
+                            <div key={i} className="pipeline-node">
+                                <div className="node-connector-line"></div>
+                                <div className="node-box glass-morphism">
+                                    <div className="node-header">
+                                        <span className="node-id">{step.id}</span>
+                                        <div className="node-icon-circle">
+                                            {step.icon}
+                                        </div>
+                                    </div>
+                                    <div className="node-body">
+                                        <span className="node-label">{step.label}</span>
+                                        <h3 className="node-title">{step.title}</h3>
+                                        <p className="node-desc">{step.desc}</p>
+                                    </div>
+                                    <div className="node-pulse"></div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                <div className="flow-visual">
-                    <img src="/WhatsApp Image 2026-03-09 at 11.09.20 AM.jpeg" alt="Technical Flow" />
-                    <div className="visual-overlay"></div>
+                <div className="pipeline-output-card glass-morphism">
+                    <div className="output-top">
+                        <Activity className="text-accent" />
+                        <span>Live System Output</span>
+                    </div>
+                    <div className="output-content">
+                        <div className="o-metric">
+                            <span className="o-l">Network Latency</span>
+                            <span className="o-v">3.8ms</span>
+                        </div>
+                        <div className="o-metric">
+                            <span className="o-l">Sync Accuracy</span>
+                            <span className="o-v">99.8%</span>
+                        </div>
+                        <div className="o-metric">
+                            <span className="o-l">Edge Uplink</span>
+                            <span className="o-v">Stable</span>
+                        </div>
+                    </div>
+                    <div className="scanning-bar"></div>
                 </div>
             </div>
         </section>
