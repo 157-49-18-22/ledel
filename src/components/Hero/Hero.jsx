@@ -15,7 +15,7 @@ const Hero = () => {
         <section className="hero-premium">
             <div className="hero-bg-wrapper">
                 <img
-                    src="/hero-bg.png"
+                    src="/hero-bg-v4.png"
                     alt="Technical Background"
                     style={{ transform: `scale(${1 + scrolled * 0.0005}) translateY(${scrolled * 0.2}px)` }}
                 />

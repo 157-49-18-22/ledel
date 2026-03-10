@@ -1,6 +1,6 @@
 .cta-portal-section {
     position: relative;
-    background: #02060e;
+    background: #0f172a;
     padding: 150px 0;
     overflow: hidden;
     display: flex;
@@ -23,11 +23,11 @@
     width: 100%;
     height: 100%;
     background-image:
-        linear-gradient(rgba(2, 195, 154, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(2, 195, 154, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(2, 195, 154, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(2, 195, 154, 0.1) 1px, transparent 1px);
     background-size: 80px 80px;
     transform: perspective(800px) rotateX(60deg) translateY(-20%);
-    opacity: 0.4;
+    opacity: 0.2;
     animation: grid-horizon 30s linear infinite;
 }
 
@@ -67,16 +67,16 @@
 .portal-content-box {
     max-width: 1100px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.01);
+    background: #1e293b;
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 40px;
     padding: 100px 60px;
     text-align: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 60px 120px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
 }
 
 .portal-header {
@@ -126,6 +126,7 @@
 .text-reveal {
     background: linear-gradient(90deg, var(--accent), var(--secondary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     display: block;
 }

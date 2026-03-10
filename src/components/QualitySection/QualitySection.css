@@ -1,5 +1,5 @@
 .quality-v2 {
-    background: #02060e;
+    background: var(--bg-main);
     position: relative;
     overflow: hidden;
 }
@@ -59,8 +59,8 @@
     font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 5px;
-    color: rgba(255, 255, 255, 0.2);
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-dim);
+    border-left: 1px solid var(--border-glass);
     padding-right: 15px;
 }
 
@@ -79,11 +79,11 @@
 }
 
 .monitor-frame {
-    background: #050a16;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
     border-radius: 30px;
     padding: 40px;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
     position: relative;
     overflow: hidden;
     transform: rotateY(5deg);
@@ -94,7 +94,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-glass);
     padding-bottom: 20px;
 }
 
@@ -104,7 +104,7 @@
     gap: 15px;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
     letter-spacing: 2px;
 }
 
@@ -200,25 +200,26 @@
 
 .data-bit {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .data-bit .v {
-    color: #fff;
+    color: var(--text-main);
     font-weight: 800;
     margin-left: 10px;
 }
 
 .terminal-feed {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.03);
     padding: 20px;
     border-radius: 12px;
     font-family: 'Space Mono', monospace;
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--text-dim);
     line-height: 1.8;
+    border: 1px solid var(--border-glass);
 }
 
 .terminal-feed .success {
@@ -233,8 +234,8 @@
 }
 
 .quality-spec-node {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
     border-radius: 20px;
     padding: 30px;
     display: flex;
@@ -246,9 +247,9 @@
 }
 
 .quality-spec-node:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: #fff;
     transform: translateX(15px);
-    border-color: rgba(255, 255, 255, 0.2);
+    border-color: var(--accent);
 }
 
 .node-icon-hex {
@@ -285,7 +286,7 @@
 .n-title {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
     margin-bottom: 15px;
 }
 
@@ -319,7 +320,7 @@
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 800;
     font-size: 1.1rem;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .node-scan-line {
@@ -356,7 +357,7 @@
     gap: 10px;
     font-size: 0.75rem;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-dim);
 }
 
 .cert-item svg {

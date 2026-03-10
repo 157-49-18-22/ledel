@@ -2,16 +2,24 @@
 
 :root {
   --primary: #028090;
-  --primary-glow: rgba(2, 128, 144, 0.4);
+  --primary-glow: rgba(2, 128, 144, 0.2);
   --secondary: #00A896;
   --accent: #02C39A;
-  --accent-glow: rgba(2, 195, 154, 0.4);
-  --dark-bg: #050914;
-  --dark-card: #0d121f;
-  --text-main: #f0f4f8;
-  --text-dim: #94a3b8;
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-glow: rgba(2, 195, 154, 0.2);
+
+  /* Premium Soft Light Theme */
+  --bg-main: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-dim: #475569;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --border-glass: rgba(0, 0, 0, 0.1);
+
+  /* Legacy aliases for stability */
+  --dark-bg: var(--bg-main);
+  --dark-card: var(--bg-card);
+  --glass: var(--bg-glass);
+  --glass-border: var(--border-glass);
 
   font-family: 'Outfit', sans-serif;
   scroll-behavior: smooth;
@@ -24,7 +32,7 @@
 }
 
 body {
-  background-color: var(--dark-bg);
+  background-color: var(--bg-main);
   color: var(--text-main);
   overflow-x: hidden;
   line-height: 1.6;
@@ -50,10 +58,10 @@ h4,
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+  background: linear-gradient(135deg, var(--text-main) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @keyframes float {
@@ -88,5 +96,23 @@ button,
 
 ::selection {
   background: var(--accent);
-  color: var(--dark-bg);
+  color: #fff;
+}
+
+/* Custom Scrollbar for Premium Feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }

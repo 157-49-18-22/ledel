@@ -1,5 +1,5 @@
 .tech-pipeline-section {
-    background: #02060e;
+    background: var(--bg-main);
     position: relative;
     overflow: hidden;
 }
@@ -19,7 +19,8 @@
     height: 600px;
     border-radius: 50%;
     filter: blur(150px);
-    opacity: 0.05;
+    opacity: 0.1;
+    /* Slightly higher for light theme visibility */
 }
 
 .g-top {
@@ -66,7 +67,7 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-glass);
     z-index: 1;
 }
 
@@ -118,17 +119,18 @@
 .node-box {
     padding: 40px 30px;
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
     transition: all 0.4s;
     height: 100%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .pipeline-node:hover .node-box {
-    background: rgba(2, 195, 154, 0.05);
+    background: #fff;
     border-color: var(--accent);
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 .node-header {
@@ -149,7 +151,7 @@
 .node-icon-circle {
     width: 50px;
     height: 50px;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(0, 0, 0, 0.03);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -177,7 +179,7 @@
 .node-title {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
     margin-bottom: 15px;
 }
 
@@ -196,9 +198,11 @@
     flex-direction: column;
     gap: 20px;
     border-radius: 20px;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
     position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 .output-top {
@@ -233,7 +237,7 @@
 .o-v {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .scanning-bar {

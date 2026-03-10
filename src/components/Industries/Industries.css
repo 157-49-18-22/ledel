@@ -1,5 +1,5 @@
 .industries-pro-section {
-    background: #02060e;
+    background: var(--bg-main);
 }
 
 .industries-bento-grid {
@@ -12,22 +12,21 @@
 }
 
 .sector-card-pro {
-    height: 450px;
-    background: #0a1120;
-    border-radius: 30px;
+    background: var(--bg-card);
+    border-radius: 32px;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
 }
 
 .card-bg-image {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
-    height: 100%;
-    z-index: 1;
+    height: 240px;
+    overflow: hidden;
 }
 
 .card-bg-image img {
@@ -35,7 +34,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s;
-    opacity: 0.6;
+    opacity: 1;
 }
 
 .card-overlay {
@@ -44,14 +43,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, transparent 0%, rgba(5, 9, 20, 0.95) 100%);
+    background: linear-gradient(to bottom, transparent 40%, var(--bg-card) 100%);
     z-index: 2;
 }
 
 .sector-card-pro:hover {
     transform: translateY(-10px);
     border-color: var(--accent);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 .sector-card-pro:hover .card-bg-image img {
@@ -62,10 +61,12 @@
 .card-content-wrap {
     position: relative;
     z-index: 10;
-    height: 100%;
-    padding: 40px;
+    padding: 30px;
+    flex: 1;
     display: flex;
     flex-direction: column;
+    margin-top: -60px;
+    /* Pull content over the image gradient */
 }
 
 /* Header */
@@ -80,10 +81,11 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
     padding: 8px 15px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-glass);
     color: var(--accent);
 }
 
@@ -92,7 +94,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .status-indicator {
@@ -136,24 +138,24 @@
 
 /* Title Area */
 .industry-name {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    color: #fff;
-    margin-bottom: 10px;
+    color: var(--text-main);
+    margin: 15px 0 8px;
 }
 
 .industry-brief {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
 }
 
 /* Stats */
 .industry-stats-bar {
     display: flex;
-    gap: 40px;
-    margin-bottom: 30px;
+    gap: 30px;
+    margin-bottom: 25px;
 }
 
 .stat-unit {
@@ -179,13 +181,13 @@
     font-family: 'Space Grotesk', sans-serif;
     font-size: 1.4rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .stat-progress-bg {
     width: 100%;
     height: 4px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.05);
     border-radius: 10px;
     margin-top: 8px;
 }
@@ -209,7 +211,7 @@
 .btn-explore-sector {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--text-main);
     font-size: 0.9rem;
     font-weight: 700;
     display: flex;

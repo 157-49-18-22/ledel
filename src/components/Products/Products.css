@@ -1,5 +1,6 @@
 .products-premium {
-    background: #03070f;
+    background: #0f172a;
+    color: #f1f5f9;
     position: relative;
     overflow: hidden;
 }
@@ -87,13 +88,13 @@
 .p-card-content {
     width: 100%;
     height: 100%;
-    background: #0c1220;
+    background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
 }
 
 .p-card-top {
@@ -106,7 +107,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .p-cat {
@@ -189,9 +190,9 @@
 .technical-archive-vault {
     max-width: 1200px;
     margin: 60px auto 100px;
-    background: rgba(4, 9, 21, 0.6);
+    background: rgba(13, 18, 31, 0.8);
     backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 35px;
     padding: 50px 70px;
     display: flex;
@@ -199,7 +200,7 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
 }
 
 .vault-left {
@@ -320,7 +321,8 @@
 .v-download-btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 20px 50px rgba(2, 195, 154, 0.4);
-    background: #fff;
+    background: var(--text-main);
+    color: #fff;
 }
 
 .vault-scanner-beam {
@@ -451,8 +453,8 @@
 }
 
 .btn-exit-grid:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: #fff;
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--text-main);
 }
 
 .rotate-180 {
@@ -484,8 +486,8 @@
 }
 
 .grid-item-tech {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 20px;
     position: relative;
