@@ -11,8 +11,7 @@ const Footer = () => {
                 <div className="footer-top">
                     <div className="footer-info-brand">
                         <div className="footer-logo">
-                            <span className="logo-dot"></span>
-                            LEDEL
+                            <img src="/logo1.png" alt="LEDEL" className="footer-logo-img" />
                         </div>
                         <p className="brand-pitch">
                             Architecting the hardware-software convergence for the modern industrial age.

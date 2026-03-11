@@ -16,8 +16,7 @@ const Navbar = () => {
     <nav className={`nav-premium ${scrolled ? 'nav-scrolled' : ''}`}>
       <div className="nav-wrapper">
         <a href="#home" className="nav-logo">
-          <span className="logo-dot"></span>
-          LEDEL
+          <img src="/logo.png" alt="LEDEL" className="logo-img" />
         </a>
 
         <ul className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>

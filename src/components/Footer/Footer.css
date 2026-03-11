@@ -35,15 +35,18 @@
 
 /* Brand Section */
 .footer-logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: 5px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    color: #fff;
     margin-bottom: 25px;
+}
+
+.footer-logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    /* Since it's a dark footer, a transparent PNG logo is best. 
+       If it has a white bg, mix-blend-mode: screen might help if the logo is black on white.
+       But usually, logo.png should be transparent. */
 }
 
 .brand-pitch {

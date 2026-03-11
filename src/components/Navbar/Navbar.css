@@ -28,17 +28,18 @@
 }
 
 .nav-logo {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 800;
-    letter-spacing: 5px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    color: var(--text-main);
-    /* Logo should be dark in light theme */
     text-decoration: none;
     transition: transform 0.3s;
+}
+
+.logo-img {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    /* mix-blend-mode: multiply; */
+    /* Optional: if we want to remove white background on light theme, but might not work on dark */
 }
 
 .nav-logo:hover {
