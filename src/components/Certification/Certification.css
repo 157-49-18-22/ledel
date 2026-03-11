@@ -78,3 +78,22 @@
 .cert-swiper .swiper-wrapper {
     transition-timing-function: linear !important;
 }
+
+@media (max-width: 768px) {
+    .cert-logo-slide {
+        width: 180px !important;
+    }
+
+    .cert-logo-box {
+        height: 80px;
+    }
+
+    .logo-name {
+        font-size: 0.8rem;
+    }
+
+    .cert-marquee-container::before,
+    .cert-marquee-container::after {
+        width: 50px;
+    }
+}

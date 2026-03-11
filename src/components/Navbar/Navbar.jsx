@@ -40,6 +40,13 @@ const Navbar = () => {
               </a>
             </li>
           ))}
+          {/* Mobile only action */}
+          <li className="mobile-only-action">
+            <button className="btn-contact mobile-nav-btn">
+              {data?.buttonText || 'Connect'}
+              <Send size={16} />
+            </button>
+          </li>
         </ul>
 
         <div className="nav-actions">

@@ -16,3 +16,17 @@
     opacity: 1;
     transform: translateX(0);
 }
+
+@media (max-width: 768px) {
+    .reveal-right {
+        transform: translateX(120px);
+    }
+    
+    .reveal-left {
+        transform: translateX(-120px);
+    }
+    
+    .reveal-box {
+        transition-duration: 1.2s; /* Slightly faster on mobile for responsiveness */
+    }
+}

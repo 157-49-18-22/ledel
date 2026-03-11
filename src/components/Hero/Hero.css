@@ -6,8 +6,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 0px 5% 60px;
-    /* Increased top padding */
+    padding: 100px 5% 60px;
+    /* Consistent top padding for navbar */
 }
 
 .hero-bg-wrapper {
@@ -226,12 +226,51 @@
 }
 
 @media (max-width: 768px) {
+    .hero-content-modern {
+        padding: 40px 20px;
+        margin-top: 40px;
+    }
+
+    .hero-badge {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 0.75rem;
+    }
+
+    .hero-title {
+        letter-spacing: -1px;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
     .hero-action-group {
         flex-direction: column;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+
+    .btn-primary-glow,
+    .btn-secondary-outline {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
+        font-size: 1rem;
     }
 
     .hero-metrics {
         gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .metric-val {
+        font-size: 1.5rem;
+    }
+
+    .metric-label {
+        font-size: 0.7rem;
     }
 
     .metric-divider {

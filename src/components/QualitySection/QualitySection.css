@@ -380,6 +380,21 @@
     .quality-bridge-header {
         flex-direction: column;
         gap: 20px;
+        text-align: center;
+    }
+
+    .v-marker {
+        writing-mode: horizontal-tb;
+        transform: none;
+        border-left: none;
+        border-bottom: 1px solid var(--border-glass);
+        padding-right: 0;
+        padding-bottom: 10px;
+        width: 100%;
+    }
+
+    .monitor-frame {
+        padding: 30px 20px;
     }
 
     .monitor-body {
@@ -387,12 +402,38 @@
         gap: 30px;
     }
 
+    .quality-spec-node {
+        flex-direction: column;
+        text-align: center;
+        gap: 25px;
+        padding: 45px 25px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 32px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    .node-icon-hex {
+        width: 80px;
+        height: 80px;
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 15px 30px var(--accent-glow);
+    }
+
     .n-title {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .n-value-row {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .quality-cert-footer {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
     }
 }

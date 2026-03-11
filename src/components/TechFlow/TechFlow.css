@@ -279,9 +279,19 @@
     .output-content {
         grid-template-columns: 1fr;
         gap: 15px;
+        text-align: center;
+    }
+
+    .o-metric {
+        align-items: center;
     }
 
     .node-title {
         font-size: 1.2rem;
+    }
+
+    .pipeline-output-card {
+        padding: 30px 20px;
+        margin: 0 10px;
     }
 }
