@@ -52,8 +52,14 @@ const Products = () => {
 
     return (
         <section id="products" className={`products-premium section-padding ${isViewing360 ? 'mode-grid-active' : ''}`}>
+            {/* Background Decorations */}
+            <div className="products-premium-glow-1"></div>
+            <div className="products-premium-glow-2"></div>
+
             <div className="section-head text-center">
-                <span className="accent-tag">Hardware Collection</span>
+                <div className="accent-tag-container">
+                    <span className="accent-tag">Hardware Collection</span>
+                </div>
                 <h2 className="title-large">
                     {mainTitle.includes(' ') ? mainTitle.split(' ').slice(0, -1).join(' ') : mainTitle} 
                     {' '}
@@ -65,19 +71,14 @@ const Products = () => {
             <div className="discovery-engine">
                 {!isViewing360 && (
                     <div className="engine-left">
-                        <div className="stat-pill glass-morphism">
+                        <div className="stat-pill">
                             <span className="stat-n">2k+</span>
                             <span className="stat-t">Units Shipped</span>
                         </div>
                         
                         {(data?.sidebarCards && data.sidebarCards.length > 0) ? (
-                            data.sidebarCards.map((sc, idx) => (
-                                <div key={idx} className="sidebar-custom-card" style={{ marginBottom: idx < data.sidebarCards.length - 1 ? '2.5rem' : 0 }}>
-                                    {sc.image && (
-                                        <div className="sidebar-card-img" style={{ marginBottom: '1rem', borderRadius: '1rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                            <img src={getImageUrl(sc.image)} alt={sc.title} style={{ width: '100%', height: '140px', objectFit: 'cover' }} />
-                                        </div>
-                                    )}
+                            data.sidebarCards.slice(0, 1).map((sc, idx) => (
+                                <div key={idx} className="sidebar-custom-card">
                                     <h3 className="engine-title" dangerouslySetInnerHTML={{ __html: (sc.title || '').replace('Hardware', 'Hardware <br />') }}></h3>
                                     <p className="engine-desc">{sc.description}</p>
                                 </div>
@@ -92,11 +93,19 @@ const Products = () => {
                         <div className="engine-features">
                             <div className="ef-item">
                                 <div className="ef-icon"><Info size={16} /></div>
-                                <span>Real-time Stock Tracking</span>
+                                <span>Real-time Tracking</span>
                             </div>
                             <div className="ef-item">
                                 <div className="ef-icon"><ShoppingCart size={16} /></div>
-                                <span>Volume Pricing Available</span>
+                                <span>Volume Pricing</span>
+                            </div>
+                            <div className="ef-item">
+                                <div className="ef-icon"><Rotate3d size={16} /></div>
+                                <span>360° Inspection</span>
+                            </div>
+                            <div className="ef-item">
+                                <div className="ef-icon"><Plus size={16} /></div>
+                                <span>Global Logistics</span>
                             </div>
                         </div>
                     </div>
@@ -110,8 +119,9 @@ const Products = () => {
                                 grabCursor={true}
                                 modules={[EffectCards, Autoplay, Navigation]}
                                 className="product-cards-swiper"
-                                autoplay={{ delay: 3500 }}
+                                autoplay={{ delay: 4000, disableOnInteraction: false }}
                                 navigation={true}
+                                speed={800}
                             >
                                 {displayProducts.map((p, i) => (
                                     <SwiperSlide key={i} className="p-card-slide">
@@ -119,6 +129,7 @@ const Products = () => {
                                             <div className="p-card-top">
                                                 <img src={p.image} alt={p.name} />
                                                 <div className="p-cat">{p.category}</div>
+                                                {i === 0 && <div className="p-featured-badge">Featured</div>}
                                             </div>
                                             <div className="p-card-body">
                                                 <h4 className="p-name">{p.name}</h4>
@@ -128,9 +139,12 @@ const Products = () => {
                                                     ))}
                                                 </div>
                                                 <div className="p-card-footer">
-                                                    <span className="p-price">{p.price}</span>
+                                                    <div className="p-price-box">
+                                                        <span className="p-price-label">Starting from</span>
+                                                        <span className="p-price">{p.price}</span>
+                                                    </div>
                                                     <button className="p-btn-quote">
-                                                        Request Quote
+                                                        <span>Quote</span>
                                                         <Plus size={18} />
                                                     </button>
                                                 </div>
@@ -141,13 +155,13 @@ const Products = () => {
                             </Swiper>
 
                             <div className="discovery-footer">
-                                <p className="discovery-hint">Maximize visibility to explore the full architectural matrix</p>
+                                <p className="discovery-hint">Global Inventory Vision</p>
                                 <button
                                     className="btn-grid-vision"
                                     onClick={() => setIsViewing360(true)}
                                 >
                                     <Rotate3d size={18} />
-                                    <span>Expand All Hardware (360°)</span>
+                                    <span>Expand All Hardware</span>
                                 </button>
                             </div>
                         </>
@@ -155,13 +169,13 @@ const Products = () => {
                         <div className="inventory-full-grid-wrapper">
                             <div className="grid-control">
                                 <button className="btn-exit-grid" onClick={() => setIsViewing360(false)}>
-                                    <ArrowRight size={18} className="rotate-180" />
-                                    <span>Back to Focus View</span>
+                                    <ArrowRight size={18} style={{ transform: 'rotate(180deg)' }} />
+                                    <span>Back to Focus</span>
                                 </button>
                             </div>
                             <div className="inventory-full-grid">
                                 {displayProducts.map((p, i) => (
-                                    <div key={i} className="grid-item-tech glass-morphism" style={{ '--p-theme': p.theme }}>
+                                    <div key={i} className="grid-item-tech" style={{ '--p-theme': p.theme }}>
                                         <div className="g-img">
                                             <img src={p.image} alt={p.name} />
                                             <div className="g-badge">{p.category}</div>
@@ -169,13 +183,12 @@ const Products = () => {
                                         <div className="g-info">
                                             <h4>{p.name}</h4>
                                             <div className="g-specs">
-                                                {p.specs.slice(0, 2).map((s, idx) => (
+                                                {p.specs.slice(0, 3).map((s, idx) => (
                                                     <span key={idx}>{s}</span>
                                                 ))}
                                             </div>
-                                            <button className="g-btn">Details <Plus size={14} /></button>
+                                            <button className="g-btn">View Details <Plus size={14} /></button>
                                         </div>
-                                        <div className="g-corner"></div>
                                     </div>
                                 ))}
                             </div>
@@ -184,16 +197,16 @@ const Products = () => {
                 </div>
             </div>
 
-            <div className="technical-archive-vault glass-morphism">
+            <div className="technical-archive-vault">
                 <div className="vault-left">
                     <div className="vault-icon-box">
                         <Download size={32} className="vault-main-icon" />
                         <div className="icon-pulse"></div>
                     </div>
                     <div className="vault-text">
-                        <span className="v-tag">Central Repository</span>
-                        <h4 className="v-title">2026 Technical Archive</h4>
-                        <p className="v-desc">Access encrypted datasheets, CAD blueprints, and compliance certifications for our entire hardware ecosystem.</p>
+                        <span className="v-tag">Service Repository</span>
+                        <h4 className="v-title">Technical Archive</h4>
+                        <p className="v-desc">Access high-resolution blueprints, technical data sheets, and compliance documentation for all products.</p>
                     </div>
                 </div>
 
@@ -202,7 +215,6 @@ const Products = () => {
                         <span className="count">48+</span>
                         <span className="label">Datasheets</span>
                     </div>
-                    <div className="v-divider"></div>
                     <div className="v-m-item">
                         <span className="count">12+</span>
                         <span className="label">CAD Models</span>
@@ -210,7 +222,7 @@ const Products = () => {
                 </div>
 
                 <button className="v-download-btn">
-                    <span>Initialize Bulk Download</span>
+                    <span>Download All</span>
                     <ArrowRight size={20} />
                 </button>
 
