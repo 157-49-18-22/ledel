@@ -15,6 +15,8 @@ import SectionEditor from './admin/SectionEditor';
 import Dashboard from './admin/Dashboard';
 import './App.css';
 
+import Connect from './components/Connect/Connect';
+
 const Home = () => (
   <div className="app">
     <Navbar />
@@ -48,11 +50,20 @@ const Home = () => (
   </div>
 );
 
+const ConnectPage = () => (
+  <div className="app">
+    <Navbar />
+    <Connect />
+    <Footer />
+  </div>
+);
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/connect" element={<ConnectPage />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>

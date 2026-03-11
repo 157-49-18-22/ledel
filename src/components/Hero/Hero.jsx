@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Calendar, Zap, Activity, MousePointer2 } from 'lucide-react';
 import { useContent } from '../../hooks/useContent';
 import './Hero.css';
@@ -6,6 +7,7 @@ import './Hero.css';
 const Hero = () => {
     const [scrolled, setScrolled] = useState(0);
     const { data, loading, getImageUrl } = useContent('hero');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY);
@@ -53,7 +55,7 @@ const Hero = () => {
                 </p>
 
                 <div className="hero-action-group">
-                    <button className="btn-primary-glow">
+                    <button className="btn-primary-glow" onClick={() => navigate('/connect')}>
                         Initialize Project
                         <ArrowRight size={20} />
                     </button>
