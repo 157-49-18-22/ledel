@@ -1,0 +1,144 @@
+:root {
+  --admin-bg: #0f172a;
+  --admin-sidebar: #1e293b;
+  --admin-card: #334155;
+  --admin-accent: #38bdf8;
+  --admin-text: #f8fafc;
+  --admin-border: #475569;
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: 'Inter', sans-serif;
+}
+
+.admin-sidebar {
+  width: 280px;
+  background-color: var(--admin-sidebar);
+  border-right: 1px solid var(--admin-border);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-sidebar h2 {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--admin-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-nav-item {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-nav-item:hover, .admin-nav-item.active {
+  background-color: var(--admin-card);
+  color: var(--admin-text);
+}
+
+.admin-nav-item.active {
+  border-left: 4px solid var(--admin-accent);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+.editor-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.editor-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--admin-sidebar);
+  border: 1px solid var(--admin-border);
+  border-radius: 0.4rem;
+  color: white;
+  font-size: 1rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--admin-accent);
+}
+
+.btn-admin {
+  background-color: var(--admin-accent);
+  color: var(--admin-bg);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.4rem;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.btn-admin:hover {
+  opacity: 0.9;
+}
+
+.image-preview {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  border: 2px solid var(--admin-border);
+}
+
+.card-editor {
+  background-color: var(--admin-card);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.btn-remove {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: #f87171;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

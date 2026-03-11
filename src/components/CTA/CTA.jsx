@@ -1,8 +1,21 @@
 import React from 'react';
 import { Send, Calendar, ArrowRight, ShieldCheck, Zap, Globe } from 'lucide-react';
+import { useContent } from '../../hooks/useContent';
 import './CTA.css';
 
 const CTA = () => {
+    const { data, loading } = useContent('cta');
+
+    if (loading) return null;
+
+    const title = data?.title || "Let's Engineer the Next Industrial Era";
+    const subtitle = data?.description || "Secure your hardware-software matrix with Ledel's Tier-1 industrial ecosystem. Scaling precision for the world's most critical infrastructures.";
+    const btn1 = data?.btn1 || "Initialize Project";
+    const btn2 = data?.btn2 || "Technical Roadmap";
+    const badgeText = data?.badge || "Global Infrastructure Node";
+    const foot1 = data?.foot1 || "ISO 9001:2015 Verified Operations";
+    const foot2 = data?.foot2 || "High-Density Rapid Deployment";
+
     return (
         <section className="cta-portal-section">
             <div className="portal-atmosphere">
@@ -16,30 +29,33 @@ const CTA = () => {
                     <div className="portal-header">
                         <div className="status-badge">
                             <Globe size={14} className="spin-slow" />
-                            <span>Global Infrastructure Node</span>
+                            <span>{badgeText}</span>
                         </div>
                     </div>
 
                     <h2 className="portal-title">
-                        Let's Engineer the <br />
-                        <span className="text-reveal">Next Industrial Era</span>
+                        {title.includes('Next') ? (
+                            <>
+                                {title.split('Next')[0]} <br />
+                                <span className="text-reveal">Next {title.split('Next')[1]}</span>
+                            </>
+                        ) : title}
                     </h2>
 
                     <p className="portal-subtitle">
-                        Secure your hardware-software matrix with Ledel's Tier-1 industrial ecosystem.
-                        Scaling precision for the world's most critical infrastructures.
+                        {subtitle}
                     </p>
 
                     <div className="portal-actions">
                         <button className="btn-portal-primary">
-                            <span className="btn-text">Initialize Project</span>
+                            <span className="btn-text">{btn1}</span>
                             <div className="btn-icon">
                                 <Send size={20} />
                             </div>
                         </button>
                         <button className="btn-portal-secondary">
                             <Calendar size={20} />
-                            <span>Technical Roadmap</span>
+                            <span>{btn2}</span>
                             <ArrowRight size={16} className="arrow-move" />
                         </button>
                     </div>
@@ -47,12 +63,12 @@ const CTA = () => {
                     <div className="portal-footer">
                         <div className="trust-signature">
                             <ShieldCheck size={16} />
-                            <span>ISO 9001:2015 Verified Operations</span>
+                            <span>{foot1}</span>
                         </div>
                         <div className="f-divider"></div>
                         <div className="trust-signature">
                             <Zap size={16} />
-                            <span>High-Density Rapid Deployment</span>
+                            <span>{foot2}</span>
                         </div>
                     </div>
 

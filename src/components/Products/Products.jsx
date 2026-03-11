@@ -2,6 +2,7 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCards, Autoplay, Navigation } from 'swiper/modules';
 import { Plus, Download, ShoppingCart, Info, ArrowRight, Rotate3d } from 'lucide-react';
+import { useContent } from '../../hooks/useContent';
 
 import 'swiper/css';
 import 'swiper/css/effect-cards';
@@ -9,50 +10,56 @@ import 'swiper/css/navigation';
 
 import './Products.css';
 
-const products = [
-    {
-        name: 'Industrial High-Bay LED',
-        category: 'LED Luminaries',
-        price: 'Enquire for Price',
-        image: '/WhatsApp Image 2026-03-09 at 11.09.21 AM.jpeg',
-        specs: ['IP66 Rated', '200W Output', '50,000 hrs Life'],
-        theme: '#02C39A'
-    },
-    {
-        name: 'Autonomous Solar Street Light',
-        category: 'Solar Solutions',
-        price: 'Enquire for Price',
-        image: '/integration.png',
-        specs: ['Smart Motion Sensor', 'LiFePO4 Battery', 'Auto Dusk-to-Dawn'],
-        theme: '#00A896'
-    },
-    {
-        name: 'Neural CCTV Node 4K',
-        category: 'Surveillance',
-        price: 'Enquire for Price',
-        image: '/security.png',
-        specs: ['AI Object Tracking', 'Night Vision Pro', 'Edge Storage'],
-        theme: '#028090'
-    },
-    {
-        name: 'Solar PV Module 550W',
-        category: 'Solar Panels',
-        price: 'Enquire for Price',
-        image: '/WhatsApp Image 2026-03-09 at 11.09.20 AM (1).jpeg',
-        specs: ['Monocrystalline', 'High Efficiency', '25yr Warranty'],
-        theme: '#70e000'
-    }
-];
-
 const Products = () => {
     const [isViewing360, setIsViewing360] = React.useState(false);
+    const { data, loading, getImageUrl } = useContent('products');
+
+    if (loading) return null;
+
+    const mainTitle = data?.title || 'Industrial Inventory';
+    const mainSubtitle = data?.description || 'Precision-engineered hardware for large-scale infrastructure deployment.';
+    
+    // Dynamic sidebar titles
+    const stackTitle = data?.stackTitle || 'The Hardware Stack';
+    const stackDesc = data?.stackDesc || 'Browse our core catalogue of enterprise gear. Every product is synchronized with our cloud ecosystem.';
+
+    // Default products if none in backend
+    const displayProducts = (data?.cards || []).length > 0 ? (data.cards.map(p => ({
+        name: p.title || 'New Product',
+        category: p.category || 'Product Category',
+        price: p.price || 'Enquire for Price',
+        image: getImageUrl(p.image) || '/placeholder.png',
+        theme: p.theme || '#02C39A',
+        specs: p.specs ? (Array.isArray(p.specs) ? p.specs : p.specs.split(',').map(s => s.trim())) : (p.description ? p.description.split(',').map(s => s.trim()) : ['High Quality', 'Industrial Grade'])
+    }))) : [
+        {
+            name: 'Industrial High-Bay LED',
+            category: 'LED Luminaries',
+            price: 'Enquire for Price',
+            image: '/WhatsApp Image 2026-03-09 at 11.09.21 AM.jpeg',
+            specs: ['IP66 Rated', '200W Output', '50,000 hrs Life'],
+            theme: '#02C39A'
+        },
+        {
+            name: 'Autonomous Solar Street Light',
+            category: 'Solar Solutions',
+            price: 'Enquire for Price',
+            image: '/integration.png',
+            specs: ['Smart Motion Sensor', 'LiFePO4 Battery', 'Auto Dusk-to-Dawn'],
+            theme: '#00A896'
+        }
+    ];
 
     return (
         <section id="products" className={`products-premium section-padding ${isViewing360 ? 'mode-grid-active' : ''}`}>
             <div className="section-head text-center">
                 <span className="accent-tag">Hardware Collection</span>
-                <h2 className="title-large">Industrial <span className="gradient-text">Inventory</span></h2>
-                <p className="lead-text">Precision-engineered hardware for large-scale infrastructure deployment.</p>
+                <h2 className="title-large">
+                    {mainTitle.includes(' ') ? mainTitle.split(' ').slice(0, -1).join(' ') : mainTitle} 
+                    {' '}
+                    <span className="gradient-text">{mainTitle.includes(' ') ? mainTitle.split(' ').slice(-1) : ''}</span>
+                </h2>
+                <p className="lead-text">{mainSubtitle}</p>
             </div>
 
             <div className="discovery-engine">
@@ -62,8 +69,25 @@ const Products = () => {
                             <span className="stat-n">2k+</span>
                             <span className="stat-t">Units Shipped</span>
                         </div>
-                        <h3 className="engine-title">The Hardware <br /> Stack</h3>
-                        <p className="engine-desc">Browse our core catalogue of enterprise gear. Every product is synchronized with our cloud ecosystem.</p>
+                        
+                        {(data?.sidebarCards && data.sidebarCards.length > 0) ? (
+                            data.sidebarCards.map((sc, idx) => (
+                                <div key={idx} className="sidebar-custom-card" style={{ marginBottom: idx < data.sidebarCards.length - 1 ? '2.5rem' : 0 }}>
+                                    {sc.image && (
+                                        <div className="sidebar-card-img" style={{ marginBottom: '1rem', borderRadius: '1rem', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                            <img src={getImageUrl(sc.image)} alt={sc.title} style={{ width: '100%', height: '140px', objectFit: 'cover' }} />
+                                        </div>
+                                    )}
+                                    <h3 className="engine-title" dangerouslySetInnerHTML={{ __html: (sc.title || '').replace('Hardware', 'Hardware <br />') }}></h3>
+                                    <p className="engine-desc">{sc.description}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <>
+                                <h3 className="engine-title" dangerouslySetInnerHTML={{ __html: stackTitle.replace('Hardware', 'Hardware <br />') }}></h3>
+                                <p className="engine-desc">{stackDesc}</p>
+                            </>
+                        )}
 
                         <div className="engine-features">
                             <div className="ef-item">
@@ -89,7 +113,7 @@ const Products = () => {
                                 autoplay={{ delay: 3500 }}
                                 navigation={true}
                             >
-                                {products.map((p, i) => (
+                                {displayProducts.map((p, i) => (
                                     <SwiperSlide key={i} className="p-card-slide">
                                         <div className="p-card-content" style={{ '--p-theme': p.theme }}>
                                             <div className="p-card-top">
@@ -136,7 +160,7 @@ const Products = () => {
                                 </button>
                             </div>
                             <div className="inventory-full-grid">
-                                {products.map((p, i) => (
+                                {displayProducts.map((p, i) => (
                                     <div key={i} className="grid-item-tech glass-morphism" style={{ '--p-theme': p.theme }}>
                                         <div className="g-img">
                                             <img src={p.image} alt={p.name} />

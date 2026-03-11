@@ -2,8 +2,18 @@ import React from 'react';
 import { Database, Cpu, Share2, Activity, ArrowRight, Binary, Settings } from 'lucide-react';
 import './TechFlow.css';
 
+import { useContent } from '../../hooks/useContent';
+
 const TechFlow = () => {
-    const pipeline = [
+    const { data, loading, getImageUrl } = useContent('techflow');
+
+    if (loading) return null;
+
+    const mainTitle = data?.title || 'The Engineering Synchronization Flow';
+    const mainSubtitle = data?.description || "We don't just manufacture hardware; we architect intelligent pipelines that optimize the path from data capture to autonomous grid response.";
+    const badgeText = data?.badge || 'Industrial Protocol V4.2';
+
+    const defaultPipeline = [
         {
             id: '01',
             title: 'Data Acquisition',
@@ -34,6 +44,15 @@ const TechFlow = () => {
         }
     ];
 
+    const pipeline = (data?.cards || []).length > 0 ? data.cards.map((c, i) => ({
+        id: (i + 1).toString().padStart(2, '0'),
+        title: c.title || 'New Step',
+        label: c.category || 'Pipeline Node',
+        desc: c.description || '',
+        image: getImageUrl(c.image),
+        icon: i === 0 ? <Database size={24} /> : i === 1 ? <Cpu size={24} /> : i === 2 ? <Share2 size={24} /> : <Settings size={24} />
+    })) : defaultPipeline;
+
     return (
         <section id="tech-flow" className="tech-pipeline-section section-padding">
             <div className="pipeline-bg-effects">
@@ -45,13 +64,10 @@ const TechFlow = () => {
                 <div className="pipeline-intro">
                     <div className="p-badge">
                         <Binary size={14} />
-                        <span>Industrial Protocol V4.2</span>
+                        <span>{badgeText}</span>
                     </div>
-                    <h2 className="title-large">The Engineering <br /><span className="gradient-text">Synchronization Flow</span></h2>
-                    <p className="lead-text">
-                        We don't just manufacture hardware; we architect intelligent pipelines
-                        that optimize the path from data capture to autonomous grid response.
-                    </p>
+                    <h2 className="title-large" dangerouslySetInnerHTML={{ __html: mainTitle.includes(' ') ? `${mainTitle.split(' ').slice(0, -2).join(' ')} <br /><span className="gradient-text">${mainTitle.split(' ').slice(-2).join(' ')}</span>` : mainTitle }}></h2>
+                    <p className="lead-text">{mainSubtitle}</p>
                 </div>
 
                 <div className="pipeline-visual">
@@ -69,7 +85,7 @@ const TechFlow = () => {
                                     <div className="node-header">
                                         <span className="node-id">{step.id}</span>
                                         <div className="node-icon-circle">
-                                            {step.icon}
+                                            {step.image ? <img src={step.image} alt={step.title} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} /> : step.icon}
                                         </div>
                                     </div>
                                     <div className="node-body">

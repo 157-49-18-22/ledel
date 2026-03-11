@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Send } from 'lucide-react';
 import './Navbar.css';
 
+import { useContent } from '../../hooks/useContent';
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { data, loading, getImageUrl } = useContent('navbar');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -12,23 +15,36 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (loading) return null;
+
+  const logo = getImageUrl(data?.image) || '/logo.png';
+  const menuItems = (data?.cards || []).length > 0 ? data.cards : [
+    { title: 'Genesis', link: '#home' },
+    { title: 'Hardware', link: '#products' },
+    { title: 'Solutions', link: '#services' },
+    { title: 'Sectors', link: '#industries' }
+  ];
+
   return (
     <nav className={`nav-premium ${scrolled ? 'nav-scrolled' : ''}`}>
       <div className="nav-wrapper">
         <a href="#home" className="nav-logo">
-          <img src="/logo.png" alt="LEDEL" className="logo-img" />
+          <img src={logo} alt="LEDEL" className="logo-img" />
         </a>
 
         <ul className={`nav-menu ${mobileMenuOpen ? 'active' : ''}`}>
-          <li><a href="#home" onClick={() => setMobileMenuOpen(false)}>Genesis</a></li>
-          <li><a href="#products" onClick={() => setMobileMenuOpen(false)}>Hardware</a></li>
-          <li><a href="#services" onClick={() => setMobileMenuOpen(false)}>Solutions</a></li>
-          <li><a href="#industries" onClick={() => setMobileMenuOpen(false)}>Sectors</a></li>
+          {menuItems.map((item, i) => (
+            <li key={i}>
+              <a href={item.link || '#'} onClick={() => setMobileMenuOpen(false)}>
+                {item.title}
+              </a>
+            </li>
+          ))}
         </ul>
 
         <div className="nav-actions">
           <button className="btn-contact">
-            Connect
+            {data?.buttonText || 'Connect'}
             <Send size={16} />
             <div className="btn-glow"></div>
           </button>

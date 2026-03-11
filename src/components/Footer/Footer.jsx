@@ -2,7 +2,19 @@ import React from 'react';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import './Footer.css';
 
+import { useContent } from '../../hooks/useContent';
+
 const Footer = () => {
+    const { data, loading, getImageUrl } = useContent('footer');
+
+    if (loading) return null;
+
+    const logo = getImageUrl(data?.image) || '/logo1.png';
+    const description = data?.description || 'Architecting the hardware-software convergence for the modern industrial age. Engineering precision, delivering impact.';
+    const address = data?.address || 'Indore, Madhya Pradesh, India';
+    const email = data?.email || 'info@ledelenterprises.com';
+    const phone = data?.phone || '+91 97705 55800';
+
     return (
         <footer className="footer-premium">
             <div className="footer-grid-bg"></div>
@@ -11,17 +23,16 @@ const Footer = () => {
                 <div className="footer-top">
                     <div className="footer-info-brand">
                         <div className="footer-logo">
-                            <img src="/logo1.png" alt="LEDEL" className="footer-logo-img" />
+                            <img src={logo} alt="LEDEL" className="footer-logo-img" />
                         </div>
                         <p className="brand-pitch">
-                            Architecting the hardware-software convergence for the modern industrial age.
-                            Engineering precision, delivering impact.
+                            {description}
                         </p>
                         <div className="social-tech-row">
-                            <a href="#" className="social-pill"><Linkedin size={18} /></a>
-                            <a href="#" className="social-pill"><Twitter size={18} /></a>
-                            <a href="#" className="social-pill"><Instagram size={18} /></a>
-                            <a href="#" className="social-pill"><Facebook size={18} /></a>
+                            <a href={data?.linkedin || "#"} className="social-pill"><Linkedin size={18} /></a>
+                            <a href={data?.twitter || "#"} className="social-pill"><Twitter size={18} /></a>
+                            <a href={data?.instagram || "#"} className="social-pill"><Instagram size={18} /></a>
+                            <a href={data?.facebook || "#"} className="social-pill"><Facebook size={18} /></a>
                         </div>
                     </div>
 
@@ -52,20 +63,20 @@ const Footer = () => {
                         <div className="contact-card-footer">
                             <div className="c-item">
                                 <MapPin size={18} className="c-icon" />
-                                <span>Indore, Madhya Pradesh, India</span>
+                                <span>{address}</span>
                             </div>
                             <div className="c-item">
                                 <Mail size={18} className="c-icon" />
-                                <span>info@ledelenterprises.com</span>
+                                <span>{email}</span>
                             </div>
                             <div className="c-item">
                                 <Phone size={18} className="c-icon" />
-                                <span>+91 97705 55800</span>
+                                <span>{phone}</span>
                             </div>
                         </div>
                         <div className="footer-status-tag">
                             <ShieldCheck size={14} />
-                            Verified Enterprise
+                            {data?.statusTag || 'Verified Enterprise'}
                         </div>
                     </div>
                 </div>
