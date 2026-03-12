@@ -56,19 +56,31 @@ const Services = () => {
             icon: <Zap size={35} />,
             color: '#70e000',
             specs: ['Smart Feed-in', 'LiFePO4 Sync', 'Max ROI']
+        },
+        {
+            id: '05',
+            title: 'Cloud Infrastructure',
+            tagline: 'Digital Backbone',
+            description: 'Scalable enterprise cloud solutions with multi-region redundancy and ultra-secure protocols.',
+            icon: <Globe size={35} />,
+            color: '#00d4ff',
+            specs: ['99.9% Uptime', 'E2E Encryption', 'Global Edge']
         }
     ];
 
-    const displayServices = (data?.cards || []).length > 0 ? data.cards.map((s, i) => ({
+    const baseServices = (data?.cards || []).length > 0 ? data.cards.map((s, i) => ({
         id: (i + 1).toString().padStart(2, '0'),
         title: s.title || 'New Service',
         tagline: s.category || 'Technology Node',
         description: s.description || '',
         image: getImageUrl(s.image),
-        color: s.theme || (i === 0 ? '#02C39A' : i === 1 ? '#00A896' : i === 2 ? '#028090' : '#70e000'),
+        color: s.theme || (i === 0 ? '#02C39A' : i === 1 ? '#00A896' : i === 2 ? '#028090' : i === 3 ? '#70e000' : '#00d4ff'),
         specs: s.specs ? (Array.isArray(s.specs) ? s.specs : s.specs.split(',').map(sp => sp.trim())) : (s.description ? s.description.split(',').map(sp => sp.trim()) : ['Quality Service', 'Industrial Grade']),
-        icon: i === 0 ? <Lightbulb size={35} /> : i === 1 ? <Video size={35} /> : i === 2 ? <Cpu size={35} /> : <Zap size={35} />
+        icon: i === 0 ? <Lightbulb size={35} /> : i === 1 ? <Video size={35} /> : i === 2 ? <Cpu size={35} /> : i === 3 ? <Zap size={35} /> : <Globe size={35} />
     })) : defaultServices;
+
+    // Double the array for a perfectly smooth infinite loop with 5 visible slides
+    const displayServices = [...baseServices, ...baseServices];
 
     return (
         <section id="services" className="services-unique-carousel section-padding">
@@ -89,16 +101,15 @@ const Services = () => {
                     centeredSlides={true}
                     slidesPerView={'auto'}
                     loop={true}
-                    loopedSlides={displayServices.length}
                     coverflowEffect={{
                         rotate: 0,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 2.5,
+                        stretch: -50,
+                        depth: 200,
+                        modifier: 1,
                         slideShadows: false,
                     }}
                     autoplay={{
-                        delay: 3500,
+                        delay: 4000,
                         disableOnInteraction: false,
                     }}
                     navigation={true}
@@ -107,7 +118,7 @@ const Services = () => {
                     className="unique-tech-swiper"
                 >
                     {displayServices.map((s, i) => (
-                        <SwiperSlide key={i} className="tech-slide-v2">
+                        <SwiperSlide key={`${s.id}-${i}`} className="tech-slide-v2">
                             <div className="tech-glass-panel" style={{ '--panel-color': s.color }}>
                                 <div className="panel-header">
                                     <div className="panel-id">NODE_{s.id}</div>

@@ -4,9 +4,11 @@
 }
 
 .carousel-container-modern {
-    max-width: 1400px;
+    max-width: 100%;
     margin: 60px auto 0;
     padding-bottom: 80px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .unique-tech-swiper {
@@ -16,7 +18,7 @@
 }
 
 .tech-slide-v2 {
-    width: 400px !important;
+    width: 380px !important;
     transition: transform 0.3s;
 }
 
