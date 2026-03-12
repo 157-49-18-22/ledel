@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const useContent = (sectionId) => {
     const [data, setData] = useState(null);
@@ -28,7 +28,12 @@ export const useContent = (sectionId) => {
     const getImageUrl = (path) => {
         if (!path) return '';
         if (path.startsWith('http')) return path;
-        return `http://localhost:5000${path}`;
+        // If it starts with /uploads, it's a legacy local file, otherwise just return as is or with prefix if needed
+        if (path.startsWith('/uploads')) {
+            const domain = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '');
+            return `${domain}${path}`;
+        }
+        return path;
     };
 
     return { data, loading, error, getImageUrl };

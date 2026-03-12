@@ -3,9 +3,16 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Upload, Plus, Trash2, Save } from 'lucide-react';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const SectionEditor = () => {
+    // Helper to get image URL for preview
+    const getPreviewUrl = (path) => {
+        if (!path) return '';
+        if (path.startsWith('http')) return path;
+        const domain = (import.meta.env.VITE_API_URL || 'http://localhost:5000').replace('/api', '');
+        return `${domain}${path}`;
+    };
     const { sectionId } = useParams();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -206,7 +213,7 @@ const SectionEditor = () => {
                                         </button>
                                     )}
                                 </div>
-                                {card.image && <img src={`http://localhost:5000${card.image}`} className="image-preview" alt="Preview" />}
+                                {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" alt="Preview" />}
                             </div>
                         </div>
                     ))}
@@ -316,7 +323,7 @@ const SectionEditor = () => {
                             </button>
                         )}
                     </div>
-                    {data.image && <img src={`http://localhost:5000${data.image}`} className="image-preview" alt="Preview" />}
+                    {data.image && <img src={getPreviewUrl(data.image)} className="image-preview" alt="Preview" />}
                 </div>
             )}
 
@@ -357,7 +364,7 @@ const SectionEditor = () => {
                                             </button>
                                         )}
                                     </div>
-                                    {card.image && <img src={`http://localhost:5000${card.image}`} className="image-preview" style={{ height: '40px', marginTop: '0.5rem' }} alt="Preview" />}
+                                    {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" style={{ height: '40px', marginTop: '0.5rem' }} alt="Preview" />}
                                 </div>
                             </div>
                         ) : (
@@ -412,7 +419,7 @@ const SectionEditor = () => {
                                                 </button>
                                             )}
                                         </div>
-                                        {card.image && <img src={`http://localhost:5000${card.image}`} className="image-preview" alt="Preview" />}
+                                        {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" alt="Preview" />}
                                     </div>
                                 </div>
                             </>

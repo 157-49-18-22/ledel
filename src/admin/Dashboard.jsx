@@ -14,8 +14,8 @@ const Dashboard = () => {
         </div>
         <div style={{ backgroundColor: '#1e293b', padding: '2rem', borderRadius: '1rem' }}>
           <h3>System Status</h3>
-          <p>Backend: Connected (http://localhost:5000)</p>
-          <p>Database: SQLite</p>
+          <p>Backend: {import.meta.env.VITE_API_URL ? 'Cloud' : 'Local'} ({import.meta.env.VITE_API_URL || 'http://localhost:5000'})</p>
+          <p>Database: Supabase (PostgreSQL)</p>
         </div>
       </div>
     </div>

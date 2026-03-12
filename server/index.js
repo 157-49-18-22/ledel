@@ -1,108 +1,99 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs-extra';
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+
+dotenv.config({ path: './server/.env' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
+// Supabase Setup
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Database setup
-let db;
-(async () => {
-    db = await open({
-        filename: path.join(__dirname, 'database.sqlite'),
-        driver: sqlite3.Database
-    });
-
-    await db.exec(`
-        CREATE TABLE IF NOT EXISTS sections (
-            id TEXT PRIMARY KEY,
-            data TEXT
-        )
-    `);
-    
-    // Initialize default data if empty
-    const count = await db.get('SELECT COUNT(*) as count FROM sections');
-    if (count.count === 0) {
-        console.log('Initializing default data...');
-        // We'll populate this later or on first request
-    }
-})();
-
-// Multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// Multer for temporary file handling before uploading to Supabase
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Routes
+
+// Get a specific section
 app.get('/api/sections/:id', async (req, res) => {
     try {
-        const section = await db.get('SELECT * FROM sections WHERE id = ?', req.params.id);
-        if (section) {
-            res.json(JSON.parse(section.data));
-        } else {
-            res.status(404).json({ error: 'Section not found' });
+        const { id } = req.params;
+        const { data, error } = await supabase
+            .from('sections')
+            .select('data')
+            .eq('id', id)
+            .single();
+
+        if (error) {
+            if (error.code === 'PGRST116') return res.status(404).json({ error: 'Section not found' });
+            throw error;
         }
+
+        res.json(typeof data.data === 'string' ? JSON.parse(data.data) : data.data);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
+// Update or Create a section
 app.post('/api/sections/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const data = JSON.stringify(req.body);
-        await db.run(
-            'INSERT OR REPLACE INTO sections (id, data) VALUES (?, ?)',
-            id, data
-        );
+        const sectionData = req.body;
+
+        const { error } = await supabase
+            .from('sections')
+            .upsert({ id, data: sectionData });
+
+        if (error) throw error;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
+// Delete a section
 app.delete('/api/sections/:id', async (req, res) => {
     try {
-        await db.run('DELETE FROM sections WHERE id = ?', req.params.id);
+        const { id } = req.params;
+        const { error } = await supabase
+            .from('sections')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-app.post('/api/upload', upload.single('image'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-    }
-    const imageUrl = `/uploads/${req.file.filename}`;
-    res.json({ imageUrl });
-});
-
-// Get all sections at once for initial load
+// Fetch all sections
 app.get('/api/sections', async (req, res) => {
     try {
-        const rows = await db.all('SELECT * FROM sections');
+        const { data, error } = await supabase
+            .from('sections')
+            .select('*');
+
+        if (error) throw error;
+
         const sections = {};
-        rows.forEach(row => {
-            sections[row.id] = JSON.parse(row.data);
+        data.forEach(row => {
+            sections[row.id] = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;
         });
         res.json(sections);
     } catch (err) {
@@ -110,6 +101,37 @@ app.get('/api/sections', async (req, res) => {
     }
 });
 
+// Upload image to Supabase Storage
+app.post('/api/upload', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        const file = req.file;
+        const fileName = `${Date.now()}-${file.originalname}`;
+        
+        // Upload to Supabase Storage bucket named 'images'
+        const { data, error } = await supabase.storage
+            .from('images')
+            .upload(fileName, file.buffer, {
+                contentType: file.mimetype,
+                upsert: false
+            });
+
+        if (error) throw error;
+
+        // Get Public URL
+        const { data: publicUrlData } = supabase.storage
+            .from('images')
+            .getPublicUrl(fileName);
+
+        res.json({ imageUrl: publicUrlData.publicUrl });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running with Supabase on port ${PORT}`);
 });
