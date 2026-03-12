@@ -29,15 +29,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Multer for temporary file handling
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, '/tmp'); // Use Render's /tmp directory
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// Multer for temporary file handling in memory
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Routes
@@ -53,7 +46,11 @@ app.get('/api/sections/:id', async (req, res) => {
             .single();
 
         if (error) {
-            if (error.code === 'PGRST116') return res.status(404).json({ error: 'Section not found' });
+            if (error.code === 'PGRST116') {
+                console.log(`Section ${id} not found in DB, returning empty.`);
+                return res.status(404).json({ error: 'Section not found' });
+            }
+            console.error('Supabase GET Error:', error);
             throw error;
         }
 
@@ -73,7 +70,10 @@ app.post('/api/sections/:id', async (req, res) => {
             .from('sections')
             .upsert({ id, data: sectionData });
 
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase UPSERT Error:', error);
+            throw error;
+        }
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -124,28 +124,31 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 
         const file = req.file;
         const fileName = `${Date.now()}-${file.originalname}`;
-        const fileContent = await fs.readFile(file.path);
         
+        console.log(`Attempting to upload ${fileName} to Supabase...`);
+
         // Upload to Supabase Storage bucket named 'images'
         const { data, error } = await supabase.storage
             .from('images')
-            .upload(fileName, fileContent, {
+            .upload(fileName, file.buffer, {
                 contentType: file.mimetype,
                 upsert: false
             });
 
-        // Cleanup temp file
-        await fs.remove(file.path);
-
-        if (error) throw error;
+        if (error) {
+            console.error('Supabase Storage Upload Error:', error);
+            return res.status(500).json({ error: error.message, details: error });
+        }
 
         // Get Public URL
         const { data: publicUrlData } = supabase.storage
             .from('images')
             .getPublicUrl(fileName);
 
+        console.log('Upload successful! Public URL:', publicUrlData.publicUrl);
         res.json({ imageUrl: publicUrlData.publicUrl });
     } catch (err) {
+        console.error('Global Upload Error:', err);
         res.status(500).json({ error: err.message });
     }
 });
