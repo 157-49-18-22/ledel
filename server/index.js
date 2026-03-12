@@ -119,37 +119,41 @@ app.get('/api/sections', async (req, res) => {
 app.post('/api/upload', upload.single('image'), async (req, res) => {
     try {
         if (!req.file) {
+            console.log('No file received in request');
             return res.status(400).json({ error: 'No file uploaded' });
         }
 
         const file = req.file;
-        const fileName = `${Date.now()}-${file.originalname}`;
+        const fileName = `${Date.now()}-${file.originalname.replace(/\s+/g, '-')}`;
         
-        console.log(`Attempting to upload ${fileName} to Supabase...`);
+        console.log(`Starting upload to bucket 'images': ${fileName}`);
 
-        // Upload to Supabase Storage bucket named 'images'
         const { data, error } = await supabase.storage
             .from('images')
             .upload(fileName, file.buffer, {
                 contentType: file.mimetype,
+                cacheControl: '3600',
                 upsert: false
             });
 
         if (error) {
-            console.error('Supabase Storage Upload Error:', error);
-            return res.status(500).json({ error: error.message, details: error });
+            console.error('Supabase Storage Error Details:', JSON.stringify(error, null, 2));
+            return res.status(500).json({ 
+                error: 'Storage Upload Failed', 
+                message: error.message,
+                details: error
+            });
         }
 
-        // Get Public URL
         const { data: publicUrlData } = supabase.storage
             .from('images')
             .getPublicUrl(fileName);
 
-        console.log('Upload successful! Public URL:', publicUrlData.publicUrl);
+        console.log('Upload completed successfully');
         res.json({ imageUrl: publicUrlData.publicUrl });
     } catch (err) {
-        console.error('Global Upload Error:', err);
-        res.status(500).json({ error: err.message });
+        console.error('Crash during upload:', err.stack);
+        res.status(500).json({ error: 'Internal Server Crash during upload', message: err.message });
     }
 });
 
