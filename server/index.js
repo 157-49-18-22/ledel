@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs-extra';
 
 dotenv.config({ path: './server/.env' });
 
@@ -19,11 +20,24 @@ const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-app.use(cors());
+app.use(cors({
+    origin: ['https://ledel.vercel.app', 'http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
 app.use(express.json());
 
-// Multer for temporary file handling before uploading to Supabase
-const storage = multer.memoryStorage();
+// Multer for temporary file handling
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '/tmp'); // Use Render's /tmp directory
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
 const upload = multer({ storage });
 
 // Routes
@@ -110,14 +124,18 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 
         const file = req.file;
         const fileName = `${Date.now()}-${file.originalname}`;
+        const fileContent = await fs.readFile(file.path);
         
         // Upload to Supabase Storage bucket named 'images'
         const { data, error } = await supabase.storage
             .from('images')
-            .upload(fileName, file.buffer, {
+            .upload(fileName, fileContent, {
                 contentType: file.mimetype,
                 upsert: false
             });
+
+        // Cleanup temp file
+        await fs.remove(file.path);
 
         if (error) throw error;
 
