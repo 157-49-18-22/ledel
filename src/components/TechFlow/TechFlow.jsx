@@ -5,9 +5,9 @@ import './TechFlow.css';
 import { useContent } from '../../hooks/useContent';
 
 const TechFlow = () => {
-    const { data, loading, getImageUrl } = useContent('techflow');
+    const { data, getImageUrl } = useContent('techflow');
 
-    if (loading) return null;
+
 
     const mainTitle = data?.title || 'The Engineering Synchronization Flow';
     const mainSubtitle = data?.description || "We don't just manufacture hardware; we architect intelligent pipelines that optimize the path from data capture to autonomous grid response.";

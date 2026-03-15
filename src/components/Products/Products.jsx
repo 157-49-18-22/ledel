@@ -12,13 +12,13 @@ import './Products.css';
 
 const Products = () => {
     const [isViewing360, setIsViewing360] = React.useState(false);
-    const { data, loading, getImageUrl } = useContent('products');
+    const { data, getImageUrl } = useContent('products');
 
-    if (loading) return null;
+
 
     const mainTitle = data?.title || 'Industrial Inventory';
     const mainSubtitle = data?.description || 'Precision-engineered hardware for large-scale infrastructure deployment.';
-    
+
     // Dynamic sidebar titles
     const stackTitle = data?.stackTitle || 'The Hardware Stack';
     const stackDesc = data?.stackDesc || 'Browse our core catalogue of enterprise gear. Every product is synchronized with our cloud ecosystem.';
@@ -61,7 +61,7 @@ const Products = () => {
                     <span className="accent-tag">Hardware Collection</span>
                 </div>
                 <h2 className="title-large">
-                    {mainTitle.includes(' ') ? mainTitle.split(' ').slice(0, -1).join(' ') : mainTitle} 
+                    {mainTitle.includes(' ') ? mainTitle.split(' ').slice(0, -1).join(' ') : mainTitle}
                     {' '}
                     <span className="gradient-text">{mainTitle.includes(' ') ? mainTitle.split(' ').slice(-1) : ''}</span>
                 </h2>
@@ -75,7 +75,7 @@ const Products = () => {
                             <span className="stat-n">2k+</span>
                             <span className="stat-t">Units Shipped</span>
                         </div>
-                        
+
                         {(data?.sidebarCards && data.sidebarCards.length > 0) ? (
                             data.sidebarCards.slice(0, 1).map((sc, idx) => (
                                 <div key={idx} className="sidebar-custom-card">

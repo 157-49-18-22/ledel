@@ -4,9 +4,9 @@ import { useContent } from '../../hooks/useContent';
 import './CTA.css';
 
 const CTA = () => {
-    const { data, loading } = useContent('cta');
+    const { data } = useContent('cta');
 
-    if (loading) return null;
+
 
     const title = data?.title || "Let's Engineer the Next Industrial Era";
     const subtitle = data?.description || "Secure your hardware-software matrix with Ledel's Tier-1 industrial ecosystem. Scaling precision for the world's most critical infrastructures.";

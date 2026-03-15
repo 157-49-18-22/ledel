@@ -10,9 +10,9 @@ import './Certification.css';
 import { useContent } from '../../hooks/useContent';
 
 const Certification = () => {
-    const { data, loading, getImageUrl } = useContent('certification');
+    const { data, getImageUrl } = useContent('certification');
 
-    if (loading) return null;
+
 
     const mainTitle = data?.title || 'Official Compliance';
     const mainSubtitle = data?.description || 'Ledel Enterprises follows strict Tier-1 industrial standards and distribution protocols.';

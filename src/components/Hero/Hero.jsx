@@ -6,7 +6,7 @@ import './Hero.css';
 
 const Hero = () => {
     const [scrolled, setScrolled] = useState(0);
-    const { data, loading, getImageUrl } = useContent('hero');
+    const { data, getImageUrl } = useContent('hero');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const Hero = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    if (loading) return <div className="hero-loading">Loading...</div>;
+
 
     // Use fetched data or fallbacks
     const title = data?.title || 'Empowering the Modern Ecosystem';

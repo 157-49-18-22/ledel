@@ -8,7 +8,7 @@ import { useContent } from '../../hooks/useContent';
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { data, loading, getImageUrl } = useContent('navbar');
+  const { data, getImageUrl } = useContent('navbar');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,7 +18,7 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (loading) return null;
+
 
   const logo = getImageUrl(data?.image) || '/logo.png';
   const menuItems = (data?.cards || []).length > 0 ? data.cards : [

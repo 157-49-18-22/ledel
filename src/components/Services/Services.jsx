@@ -13,9 +13,9 @@ import './Services.css';
 import { useContent } from '../../hooks/useContent';
 
 const Services = () => {
-    const { data, loading, getImageUrl } = useContent('services');
+    const { data, getImageUrl } = useContent('services');
 
-    if (loading) return null;
+
 
     const mainTitle = data?.title || 'Core Technologies';
     const mainSubtitle = data?.description || 'Strategic engineering for the next generation of industrial infrastructure.';

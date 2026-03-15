@@ -62,9 +62,9 @@ const industries = [
 import { useContent } from '../../hooks/useContent';
 
 const Industries = () => {
-    const { data, loading, getImageUrl } = useContent('industries');
+    const { data, getImageUrl } = useContent('industries');
 
-    if (loading) return null;
+
 
     const mainTitle = data?.title || 'Sector Intelligence';
     const mainSubtitle = data?.description || 'Real-time performance matrices across the modern industrial landscape.';

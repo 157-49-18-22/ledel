@@ -5,9 +5,9 @@ import './Footer.css';
 import { useContent } from '../../hooks/useContent';
 
 const Footer = () => {
-    const { data, loading, getImageUrl } = useContent('footer');
+    const { data, getImageUrl } = useContent('footer');
 
-    if (loading) return null;
+
 
     const logo = getImageUrl(data?.image) || '/logo1.png';
     const description = data?.description || 'Architecting the hardware-software convergence for the modern industrial age. Engineering precision, delivering impact.';
