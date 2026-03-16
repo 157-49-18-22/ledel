@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Upload, Plus, Trash2, Save } from 'lucide-react';
+import { Upload, Plus, Trash2, Save, Edit2, X, CheckCircle, XCircle } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -17,6 +17,16 @@ const SectionEditor = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [itemForm, setItemForm] = useState({
+        title: '',
+        category: '',
+        description: '',
+        price: '',
+        image: '',
+        status: 'Active',
+        sortOrder: ''
+    });
 
     useEffect(() => {
         fetchData();
@@ -127,8 +137,68 @@ const SectionEditor = () => {
             handleSidebarCardChange(index, field, '');
         } else if (index !== null) {
             handleCardChange(index, field, '');
+        } else if (field === 'itemFormImage') {
+            setItemForm({ ...itemForm, image: '' });
         } else {
             setData({ ...data, [field]: '' });
+        }
+    };
+
+    const handleItemFormChange = (field, value) => {
+        setItemForm({ ...itemForm, [field]: value });
+    };
+
+    const handleItemImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const res = await axios.post(`${API_BASE}/upload`, formData);
+            setItemForm({ ...itemForm, image: res.data.imageUrl });
+        } catch (err) {
+            alert('Upload failed');
+        }
+    };
+
+    const submitItemForm = () => {
+        const newCards = [...(data.cards || [])];
+        if (editingIndex !== null) {
+            newCards[editingIndex] = itemForm;
+        } else {
+            newCards.push(itemForm);
+        }
+        setData({ ...data, cards: newCards });
+        resetItemForm();
+    };
+
+    const editItem = (index) => {
+        setEditingIndex(index);
+        setItemForm(data.cards[index]);
+        // Scroll to form
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+    };
+
+    const resetItemForm = () => {
+        setEditingIndex(null);
+        setItemForm({
+            title: '',
+            category: '',
+            description: '',
+            price: '',
+            image: '',
+            status: 'Active',
+            sortOrder: ''
+        });
+    };
+
+    const scrollToForm = () => {
+        resetItemForm();
+        const element = document.getElementById('item-form-section');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
@@ -205,10 +275,18 @@ const SectionEditor = () => {
                             </div>
                             <div className="form-group">
                                 <label>Card Image / Icon</label>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                    <input type="file" onChange={(e) => handleImageUpload(e, 'image', index, true)} />
+                                <div className="file-upload-wrapper">
+                                    <label className="file-upload-label">
+                                        <Upload size={18} />
+                                        Choose Card Photo
+                                        <input 
+                                            type="file" 
+                                            className="file-upload-input" 
+                                            onChange={(e) => handleImageUpload(e, 'image', index, true)} 
+                                        />
+                                    </label>
                                     {card.image && (
-                                        <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.5rem' }} onClick={() => clearImage('image', index, true)}>
+                                        <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.4rem' }} onClick={() => clearImage('image', index, true)}>
                                             Clear
                                         </button>
                                     )}
@@ -315,8 +393,16 @@ const SectionEditor = () => {
             ) : (
                 <div className="form-group">
                     <label>Section Background / Icon</label>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        <input type="file" onChange={(e) => handleImageUpload(e, 'image')} />
+                    <div className="file-upload-wrapper">
+                        <label className="file-upload-label">
+                            <Upload size={18} />
+                            Choose Background
+                            <input 
+                                type="file" 
+                                className="file-upload-input" 
+                                onChange={(e) => handleImageUpload(e, 'image')} 
+                            />
+                        </label>
                         {data.image && (
                             <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.5rem' }} onClick={() => clearImage('image')}>
                                 Clear Image
@@ -327,105 +413,176 @@ const SectionEditor = () => {
                 </div>
             )}
 
-            {/* Cards section (for Products, Services, etc.) */}
+            {/* Manage Items Section (Table & Form) */}
             {(sectionId !== 'cta' && sectionId !== 'footer' && sectionId !== 'navbar') && (
-                <div className="cards-section" style={{ marginTop: '3rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3>{sectionId.toUpperCase()} Items / Cards</h3>
-                        <button className="btn-admin" style={{ backgroundColor: '#10b981' }} onClick={addCard}>
+                <div className="manage-items-section" style={{ marginTop: '3rem' }}>
+                    <div className="admin-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <h3 style={{ margin: 0 }}>Manage {sectionId.toUpperCase()} Items</h3>
+                        <button className="btn-admin" style={{ backgroundColor: '#10b981' }} onClick={scrollToForm}>
                             <Plus size={18} />
-                            Add New Item
+                            Add More Item
                         </button>
                     </div>
-                {(data.cards || []).map((card, index) => (
-                    <div key={index} className="card-editor" style={{ borderLeft: '5px solid var(--admin-accent)' }}>
-                        <button className="btn-remove" onClick={() => removeCard(index)}>
-                            <Trash2 size={18} />
-                        </button>
+
+                    {/* Item Form */}
+                    <div id="item-form-section" className="item-management-form" style={{ 
+                        backgroundColor: 'rgba(255,255,255,0.03)', 
+                        padding: '2rem', 
+                        borderRadius: '1rem', 
+                        marginBottom: '2rem',
+                        border: '1px solid var(--admin-border)'
+                    }}>
+                        <h4 style={{ marginBottom: '1.5rem', color: 'var(--admin-accent)' }}>
+                            {editingIndex !== null ? 'Update Selected Item' : 'Add New Item Configuration'}
+                        </h4>
                         
-                        {sectionId === 'certification' ? (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
-                                <div className="form-group">
-                                    <label>Logo Name / Standard</label>
-                                    <input 
-                                        className="form-control" 
-                                        value={card.title || ''} 
-                                        onChange={(e) => handleCardChange(index, 'title', e.target.value)} 
-                                        placeholder="e.g. ISO 9001"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>Upload Logo</label>
-                                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                        <input type="file" onChange={(e) => handleImageUpload(e, 'image', index)} />
-                                        {card.image && (
-                                            <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.4rem' }} onClick={() => clearImage('image', index)}>
-                                                Clear
-                                            </button>
-                                        )}
-                                    </div>
-                                    {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" style={{ height: '40px', marginTop: '0.5rem' }} alt="Preview" />}
-                                </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                            <div className="form-group">
+                                <label>Item Name / Title</label>
+                                <input 
+                                    className="form-control" 
+                                    value={itemForm.title || ''} 
+                                    onChange={(e) => handleItemFormChange('title', e.target.value)}
+                                    placeholder="Enter heading text"
+                                />
                             </div>
-                        ) : (
-                            <>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <div className="form-group">
-                                        <label>Item Title (Name)</label>
+                            <div className="form-group">
+                                <label>Category / Link / Price</label>
+                                <input 
+                                    className="form-control" 
+                                    value={itemForm.category || ''} 
+                                    onChange={(e) => handleItemFormChange('category', e.target.value)}
+                                    placeholder="Add category or details"
+                                />
+                            </div>
+                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                                <label>Description / Subheading Details</label>
+                                <textarea 
+                                    className="form-control" 
+                                    rows="2"
+                                    value={itemForm.description || ''} 
+                                    onChange={(e) => handleItemFormChange('description', e.target.value)}
+                                    placeholder="Enter subheading text"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Visibility Status</label>
+                                <select 
+                                    className="form-control"
+                                    value={itemForm.status || 'Active'}
+                                    onChange={(e) => handleItemFormChange('status', e.target.value)}
+                                >
+                                    <option value="Active">Active (Visible)</option>
+                                    <option value="Inactive">Inactive (Hidden)</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>Display Sort Order</label>
+                                <input 
+                                    type="number"
+                                    className="form-control" 
+                                    value={itemForm.sortOrder} 
+                                    onChange={(e) => handleItemFormChange('sortOrder', e.target.value)}
+                                    placeholder="Enter order number"
+                                />
+                            </div>
+                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                                <label>Item Photo / Image</label>
+                                <div className="file-upload-wrapper">
+                                    <label className="file-upload-label">
+                                        <Upload size={18} />
+                                        Upload Item Photo
                                         <input 
-                                            className="form-control" 
-                                            value={card.title || ''} 
-                                            onChange={(e) => handleCardChange(index, 'title', e.target.value)} 
+                                            type="file" 
+                                            className="file-upload-input" 
+                                            onChange={handleItemImageUpload} 
                                         />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Category</label>
-                                        <input 
-                                            className="form-control" 
-                                            value={card.category || ''} 
-                                            onChange={(e) => handleCardChange(index, 'category', e.target.value)} 
-                                            placeholder="e.g. LED Solutions"
-                                        />
-                                    </div>
+                                    </label>
+                                    {itemForm.image && (
+                                        <button className="btn-admin" style={{ backgroundColor: '#475569' }} onClick={() => clearImage('itemFormImage')}>
+                                            Clear Selected
+                                        </button>
+                                    )}
                                 </div>
+                                {itemForm.image && <img src={getPreviewUrl(itemForm.image)} className="image-preview" style={{ maxHeight: '150px' }} alt="Preview" />}
+                            </div>
+                        </div>
 
-                                <div className="form-group">
-                                    <label>Description / Specs (use comma for separate points)</label>
-                                    <textarea 
-                                        className="form-control" 
-                                        value={card.description || ''} 
-                                        onChange={(e) => handleCardChange(index, 'description', e.target.value)} 
-                                        placeholder="e.g. 500W Output, IP66 Rated"
-                                    />
-                                </div>
-
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <div className="form-group">
-                                        <label>Price Label</label>
-                                        <input 
-                                            className="form-control" 
-                                            value={card.price || ''} 
-                                            onChange={(e) => handleCardChange(index, 'price', e.target.value)} 
-                                            placeholder="Enquire for Price"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Item Image</label>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <input type="file" onChange={(e) => handleImageUpload(e, 'image', index)} />
-                                            {card.image && (
-                                                <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.5rem' }} onClick={() => clearImage('image', index)}>
-                                                    Clear
-                                                </button>
-                                            )}
-                                        </div>
-                                        {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" alt="Preview" />}
-                                    </div>
-                                </div>
-                            </>
-                        )}
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                            <button className="btn-admin" onClick={submitItemForm} style={{ minWidth: '150px' }}>
+                                {editingIndex !== null ? 'UPDATE ITEM' : 'SUBMIT'}
+                            </button>
+                            {editingIndex !== null && (
+                                <button className="btn-admin" style={{ backgroundColor: '#475569' }} onClick={resetItemForm}>
+                                    <X size={18} /> Cancel Edit
+                                </button>
+                            )}
+                        </div>
                     </div>
-                ))}
+
+                    {/* Items Table */}
+                    <div className="admin-table-container">
+                        <table className="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>S. NO.</th>
+                                    <th>NAME</th>
+                                    <th>PHOTO</th>
+                                    <th>SORT ORDER</th>
+                                    <th>STATUS</th>
+                                    <th>EDIT</th>
+                                    <th>DELETE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(data.cards || []).map((card, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            <div style={{ fontWeight: 'bold' }}>{card.title || 'Untitled'}</div>
+                                            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{card.category}</div>
+                                        </td>
+                                        <td>
+                                            {card.image ? (
+                                                <img src={getPreviewUrl(card.image)} alt="Preview" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--admin-border)' }} />
+                                            ) : (
+                                                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>No image</span>
+                                            )}
+                                        </td>
+                                        <td>{card.sortOrder || 0}</td>
+                                        <td>
+                                            <span style={{ 
+                                                padding: '0.25rem 0.5rem', 
+                                                borderRadius: '4px', 
+                                                fontSize: '0.75rem', 
+                                                backgroundColor: card.status === 'Inactive' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                                                color: card.status === 'Inactive' ? '#f87171' : '#34d399'
+                                            }}>
+                                                {card.status || 'Active'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button className="action-btn edit" onClick={() => editItem(index)}>
+                                                <Edit2 size={16} />
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="action-btn delete" onClick={() => removeCard(index)}>
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {(!data.cards || data.cards.length === 0) && (
+                                    <tr>
+                                        <td colSpan="7" style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+                                            No items found. Add your first item above.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
         </div>
