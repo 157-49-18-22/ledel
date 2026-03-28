@@ -161,6 +161,72 @@
     transform: translateY(-2px);
 }
 
+/* ── Shop Now Button ── */
+.btn-shop {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
+}
+
+.btn-shop::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: skewX(-20deg);
+    animation: shop-shimmer 2.5s infinite;
+}
+
+@keyframes shop-shimmer {
+    0%   { left: -100%; }
+    60%  { left: 150%; }
+    100% { left: 150%; }
+}
+
+.btn-shop-glow {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 12px;
+    background: rgba(249, 115, 22, 0.6);
+    filter: blur(10px);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.btn-shop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(249, 115, 22, 0.5);
+    background: linear-gradient(135deg, #fb923c 0%, #f43f5e 100%);
+}
+
+.btn-shop:hover .btn-shop-glow {
+    opacity: 1;
+}
+
 .mobile-toggle {
     display: none;
     flex-direction: column;
@@ -274,5 +340,23 @@
 
     .btn-contact:not(.mobile-nav-btn) {
         display: none;
+    }
+
+    /* Hide desktop shop btn on mobile, show mobile-shop-item */
+    .btn-shop:not(.mobile-nav-btn) {
+        display: none;
+    }
+
+    .mobile-shop-item {
+        display: block;
+        padding: 0 40px;
+    }
+
+    .btn-shop.mobile-nav-btn {
+        width: 100%;
+        justify-content: center;
+        text-decoration: none;
+        margin-top: 10px;
+        padding: 15px 0 !important;
     }
 }

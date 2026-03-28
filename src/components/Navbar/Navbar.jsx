@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Send } from 'lucide-react';
+import { Send, ShoppingBag } from 'lucide-react';
 import './Navbar.css';
 
 import { useContent } from '../../hooks/useContent';
@@ -66,6 +66,17 @@ const Navbar = () => {
             </li>
           ))}
           {/* Mobile only action */}
+          <li className="mobile-only-action mobile-shop-item">
+            <a
+              href="https://ledelenterprises.co.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-shop mobile-nav-btn"
+            >
+              <ShoppingBag size={16} />
+              Visit Our Store
+            </a>
+          </li>
           <li className="mobile-only-action">
             <button className="btn-contact mobile-nav-btn" onClick={handleConnectClick}>
               {data?.buttonText || 'Connect'}
@@ -75,6 +86,17 @@ const Navbar = () => {
         </ul>
 
         <div className="nav-actions">
+          <a
+            href="https://ledelenterprises.co.in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-shop"
+          >
+            <ShoppingBag size={16} />
+            Shop Now
+            <div className="btn-shop-glow"></div>
+          </a>
+
           <button className="btn-contact" onClick={handleConnectClick}>
             {data?.buttonText || 'Connect'}
             <Send size={16} />
