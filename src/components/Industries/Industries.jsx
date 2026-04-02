@@ -169,7 +169,7 @@ const Industries = () => {
 
                             <div className="card-main-title">
                                 <h3 className="industry-name">{ind.name}</h3>
-                                <p className="industry-brief">Optimizing infrastructure with hardware-software synchronization.</p>
+                                <p className="industry-brief">{ind.description || 'Optimizing infrastructure with hardware-software synchronization.'}</p>
                             </div>
 
                             <div className="industry-stats-bar">

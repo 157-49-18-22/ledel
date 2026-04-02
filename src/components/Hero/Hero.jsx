@@ -22,11 +22,21 @@ const Hero = () => {
     const description = data?.description || "Ledel Enterprises integrates advanced LED architectures, autonomous security networks, and cloud-driven industrial intelligence. We don't just build; we simulate the future.";
     const badge = data?.badge || 'Next-Gen Infrastructure Solutions';
     const bgImage = getImageUrl(data?.image) || '/hero-bg-v4.png';
-    const cards = data?.cards || [
+
+    // Metric cards — editable from admin dashboard
+    const defaultMetrics = [
         { label: 'Years R&D', value: '15+', icon: <Calendar className="metric-icon" size={24} /> },
         { label: 'Smart Nodes', value: '500+', icon: <Zap className="metric-icon" size={24} /> },
         { label: 'Uptime', value: '99.9%', icon: <Activity className="metric-icon" size={24} /> },
     ];
+    const metricIcons = [
+        <Calendar className="metric-icon" size={24} />,
+        <Zap className="metric-icon" size={24} />,
+        <Activity className="metric-icon" size={24} />,
+    ];
+    const cards = data?.metricCards
+        ? data.metricCards.map((m, i) => ({ ...m, icon: metricIcons[i] || <Activity className="metric-icon" size={24} /> }))
+        : defaultMetrics;
 
     return (
         <section className="hero-premium">

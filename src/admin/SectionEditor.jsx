@@ -17,12 +17,14 @@ const SectionEditor = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [showSidebarSettings, setShowSidebarSettings] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [itemForm, setItemForm] = useState({
         title: '',
         category: '',
         description: '',
         price: '',
+        nodes: '',
         image: '',
         status: 'Active',
         sortOrder: ''
@@ -86,7 +88,7 @@ const SectionEditor = () => {
     };
 
     const addCard = () => {
-        const newCards = [...(data.cards || []), { title: '', description: '', image: '', category: '', price: '' }];
+        const newCards = [...(data.cards || []), { title: '', description: '', image: '', category: '', price: '', nodes: '' }];
         setData({ ...data, cards: newCards });
     };
 
@@ -100,6 +102,52 @@ const SectionEditor = () => {
             const newCards = data.cards.filter((_, i) => i !== index);
             setData({ ...data, cards: newCards });
         }
+    };
+
+    const [showSidebarForm, setShowSidebarForm] = useState(false);
+    const [editingSidebarIndex, setEditingSidebarIndex] = useState(null);
+    const [sidebarForm, setSidebarForm] = useState({
+        title: '',
+        description: '',
+        image: ''
+    });
+
+    const resetSidebarForm = () => {
+        setEditingSidebarIndex(null);
+        setSidebarForm({ title: '', description: '', image: '' });
+        setShowSidebarForm(false);
+    };
+
+    const editSidebarCard = (index) => {
+        setEditingSidebarIndex(index);
+        setSidebarForm(data.sidebarCards[index]);
+        setShowSidebarForm(true);
+    };
+
+    const submitSidebarForm = () => {
+        const newCards = [...(data.sidebarCards || [])];
+        if (editingSidebarIndex !== null) {
+            newCards[editingSidebarIndex] = sidebarForm;
+        } else {
+            newCards.push(sidebarForm);
+        }
+        setData({ ...data, sidebarCards: newCards });
+        resetSidebarForm();
+    };
+
+    const handleSidebarFormChange = (field, value) => {
+        setSidebarForm({ ...sidebarForm, [field]: value });
+    };
+
+    const handleSidebarImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await axios.post(`${API_BASE}/upload`, formData);
+            setSidebarForm({ ...sidebarForm, image: res.data.imageUrl });
+        } catch (err) { alert('Upload failed'); }
     };
 
     const removeSidebarCard = (index) => {
@@ -188,6 +236,7 @@ const SectionEditor = () => {
             category: '',
             description: '',
             price: '',
+            nodes: '',
             image: '',
             status: 'Active',
             sortOrder: ''
@@ -243,74 +292,190 @@ const SectionEditor = () => {
             </div>
 
             {sectionId === 'products' && (
-                <div style={{ backgroundColor: 'rgba(56, 189, 248, 0.05)', padding: '1.5rem', borderRadius: '0.5rem', marginBottom: '2rem', border: '1px dashed var(--admin-accent)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h4 style={{ color: 'var(--admin-accent)', margin: 0 }}>Left Sidebar Collection</h4>
-                        <button className="btn-admin" style={{ backgroundColor: '#38bdf8', color: '#0f172a', scale: '0.8' }} onClick={addSidebarCard}>
-                            <Plus size={16} /> Add Sidebar Card
-                        </button>
-                    </div>
-                    
-                    {(data.sidebarCards || []).map((card, index) => (
-                        <div key={index} className="card-editor" style={{ marginBottom: '1rem', backgroundColor: 'rgba(255,255,255,0.03)' }}>
-                            <button className="btn-remove" onClick={() => removeSidebarCard(index)} style={{ top: '0.5rem', right: '0.5rem' }}>
-                                <Trash2 size={16} />
+                <div style={{ backgroundColor: 'rgba(56, 189, 248, 0.05)', padding: '1.5rem', borderRadius: '0.75rem', marginBottom: '2.2rem', border: '1px dashed var(--admin-accent)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <h3 style={{ color: 'var(--admin-accent)', margin: 0 }}>Left Sidebar Collection</h3>
+                        <div style={{ display: 'flex', gap: '0.8rem' }}>
+                            <button className="btn-admin" style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid var(--admin-border)' }} 
+                                onClick={() => setShowSidebarSettings(!showSidebarSettings)}>
+                                <Edit2 size={16} /> {showSidebarSettings ? 'Hide Stats' : 'Edit Sidebar Stats'}
                             </button>
+                            <button className="btn-admin" style={{ backgroundColor: '#38bdf8', color: '#0f172a' }} onClick={() => setShowSidebarForm(true)}>
+                                <Plus size={16} /> Add Sidebar Card
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Global Sidebar Settings (Togglable) */}
+                    {showSidebarSettings && (
+                        <div style={{ padding: '1.5rem', backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '0.5rem', marginBottom: '1.5rem', border: '1px solid var(--admin-border)' }}>
+                            <h4 style={{ marginTop: 0, color: 'var(--admin-accent)' }}>Global Sidebar Configuration</h4>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+                                <div className="form-group">
+                                    <label>Units Shipped (Number)</label>
+                                    <input className="form-control" value={data.shippedCount || ''} onChange={(e) => handleTextChange(e, 'shippedCount')} placeholder="e.g. 2k+" />
+                                </div>
+                                <div className="form-group">
+                                    <label>Units Shipped (Label)</label>
+                                    <input className="form-control" value={data.shippedLabel || ''} onChange={(e) => handleTextChange(e, 'shippedLabel')} placeholder="e.g. Units Shipped" />
+                                </div>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                {[1, 2, 3, 4].map(num => (
+                                    <div key={num} className="form-group">
+                                        <label>Feature {num}</label>
+                                        <input className="form-control" value={data[`feature${num}`] || ''} onChange={(e) => handleTextChange(e, `feature${num}`)} />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Sidebar Card Table */}
+                    <div className="admin-table-container" style={{ margin: 0, overflow: 'hidden' }}>
+                        <table className="admin-table" style={{ fontSize: '0.85rem' }}>
+                            <thead>
+                                <tr>
+                                    <th>TITLE</th>
+                                    <th>IMAGE</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {(data.sidebarCards || []).map((card, idx) => (
+                                    <tr key={idx}>
+                                        <td>{card.title || 'Untitled'}</td>
+                                        <td>{card.image ? <img src={getPreviewUrl(card.image)} style={{ width: '40px', height: '40px', borderRadius: '4px' }} alt="SBar" /> : '-'}</td>
+                                        <td>
+                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <button className="action-btn edit" onClick={() => editSidebarCard(idx)}><Edit2 size={14} /></button>
+                                                <button className="action-btn delete" onClick={() => removeSidebarCard(idx)}><Trash2 size={14} /></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {(!data.sidebarCards || data.sidebarCards.length === 0) && (
+                                    <tr><td colSpan="3" style={{ textAlign: 'center', opacity: 0.5 }}>No sidebar cards.</td></tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Sidebar Card Form (Modal-like) */}
+                    {showSidebarForm && (
+                        <div style={{ marginTop: '1.5rem', padding: '1.5rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', borderRadius: '0.5rem', border: '1px solid var(--admin-accent)' }}>
+                            <h4 style={{ marginTop: 0, color: 'var(--admin-accent)' }}>{editingSidebarIndex !== null ? 'Edit' : 'Add New'} Sidebar Card</h4>
                             <div className="form-group">
                                 <label>Card Title</label>
-                                <input 
-                                    className="form-control" 
-                                    value={card.title || ''} 
-                                    onChange={(e) => handleSidebarCardChange(index, 'title', e.target.value)} 
-                                />
+                                <input className="form-control" value={sidebarForm.title || ''} onChange={(e) => handleSidebarFormChange('title', e.target.value)} />
                             </div>
                             <div className="form-group">
                                 <label>Description</label>
-                                <textarea 
-                                    className="form-control" 
-                                    rows="2"
-                                    value={card.description || ''} 
-                                    onChange={(e) => handleSidebarCardChange(index, 'description', e.target.value)} 
-                                />
+                                <textarea className="form-control" rows="2" value={sidebarForm.description || ''} onChange={(e) => handleSidebarFormChange('description', e.target.value)} />
                             </div>
                             <div className="form-group">
-                                <label>Card Image / Icon</label>
+                                <label>Sidebar Card Image</label>
                                 <div className="file-upload-wrapper">
                                     <label className="file-upload-label">
-                                        <Upload size={18} />
-                                        Choose Card Photo
-                                        <input 
-                                            type="file" 
-                                            className="file-upload-input" 
-                                            onChange={(e) => handleImageUpload(e, 'image', index, true)} 
-                                        />
+                                        <Upload size={18} /> Choose Card Photo
+                                        <input type="file" className="file-upload-input" onChange={handleSidebarImageUpload} />
                                     </label>
-                                    {card.image && (
-                                        <button className="btn-admin" style={{ backgroundColor: '#475569', padding: '0.4rem' }} onClick={() => clearImage('image', index, true)}>
-                                            Clear
-                                        </button>
-                                    )}
                                 </div>
-                                {card.image && <img src={getPreviewUrl(card.image)} className="image-preview" alt="Preview" />}
+                                {sidebarForm.image && <img src={getPreviewUrl(sidebarForm.image)} className="image-preview" style={{ maxHeight: '80px', marginTop: '0.5rem' }} alt="P" />}
+                            </div>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                <button className="btn-admin" onClick={submitSidebarForm}>Submit</button>
+                                <button className="btn-admin" style={{ backgroundColor: 'transparent', border: '1px solid var(--admin-border)' }} onClick={resetSidebarForm}>Cancel</button>
                             </div>
                         </div>
-                    ))}
-                    
-                    {(!data.sidebarCards || data.sidebarCards.length === 0) && (
-                        <p style={{ fontSize: '0.9rem', color: '#64748b' }}>No custom sidebar cards. Default "The Hardware Stack" will be shown.</p>
                     )}
                 </div>
             )}
 
             {sectionId === 'hero' && (
-                <div className="form-group">
-                    <label>Badge Text</label>
-                    <input 
-                        className="form-control" 
-                        value={data.badge || ''} 
-                        onChange={(e) => handleTextChange(e, 'badge')} 
-                    />
-                </div>
+                <>
+                    <div className="form-group">
+                        <label>Badge Text</label>
+                        <input 
+                            className="form-control" 
+                            value={data.badge || ''} 
+                            onChange={(e) => handleTextChange(e, 'badge')} 
+                        />
+                    </div>
+
+                    {/* Hero Metrics Editor */}
+                    <div style={{ 
+                        backgroundColor: 'rgba(56, 189, 248, 0.05)', 
+                        padding: '1.5rem', 
+                        borderRadius: '0.75rem', 
+                        marginBottom: '1.5rem',
+                        border: '1px dashed var(--admin-accent)'
+                    }}>
+                        <h4 style={{ color: 'var(--admin-accent)', marginBottom: '1.25rem', marginTop: 0 }}>
+                            📊 Stats / Metric Cards
+                        </h4>
+                        <p style={{ fontSize: '0.82rem', color: '#64748b', marginBottom: '1.25rem', marginTop: 0 }}>
+                            Yahan se "15+ Years R&D", "500+ Smart Nodes", "99.9% Uptime" jaise stats change kar sakte ho.
+                        </p>
+                        {[
+                            { default_label: 'Years R&D', default_value: '15+' },
+                            { default_label: 'Smart Nodes', default_value: '500+' },
+                            { default_label: 'Uptime', default_value: '99.9%' },
+                        ].map((def, index) => {
+                            const currentCards = data.cards && data.cards[index] && !data.cards[index].icon
+                                ? data.cards 
+                                : (data.metricCards || []);
+                            const card = (data.metricCards || [])[index] || { label: def.default_label, value: def.default_value };
+                            return (
+                                <div key={index} style={{ 
+                                    display: 'grid', 
+                                    gridTemplateColumns: '1fr 1fr', 
+                                    gap: '1rem', 
+                                    marginBottom: '1rem',
+                                    padding: '1rem',
+                                    backgroundColor: 'rgba(255,255,255,0.03)',
+                                    borderRadius: '0.5rem',
+                                    border: '1px solid var(--admin-border)'
+                                }}>
+                                    <div className="form-group" style={{ margin: 0 }}>
+                                        <label style={{ fontSize: '0.8rem' }}>Stat #{index + 1} — Value (e.g. 15+)</label>
+                                        <input 
+                                            className="form-control"
+                                            value={card.value || ''}
+                                            placeholder={def.default_value}
+                                            onChange={(e) => {
+                                                const updated = [...(data.metricCards || [
+                                                    { label: 'Years R&D', value: '15+' },
+                                                    { label: 'Smart Nodes', value: '500+' },
+                                                    { label: 'Uptime', value: '99.9%' },
+                                                ])];
+                                                updated[index] = { ...updated[index], value: e.target.value };
+                                                setData({ ...data, metricCards: updated });
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="form-group" style={{ margin: 0 }}>
+                                        <label style={{ fontSize: '0.8rem' }}>Stat #{index + 1} — Label (e.g. Years R&D)</label>
+                                        <input 
+                                            className="form-control"
+                                            value={card.label || ''}
+                                            placeholder={def.default_label}
+                                            onChange={(e) => {
+                                                const updated = [...(data.metricCards || [
+                                                    { label: 'Years R&D', value: '15+' },
+                                                    { label: 'Smart Nodes', value: '500+' },
+                                                    { label: 'Uptime', value: '99.9%' },
+                                                ])];
+                                                updated[index] = { ...updated[index], label: e.target.value };
+                                                setData({ ...data, metricCards: updated });
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </>
             )}
 
             {sectionId === 'footer' && (
@@ -414,7 +579,7 @@ const SectionEditor = () => {
             )}
 
             {/* Manage Items Section (Table & Form) */}
-            {(sectionId !== 'cta' && sectionId !== 'footer' && sectionId !== 'navbar') && (
+            {(sectionId !== 'cta' && sectionId !== 'footer' && sectionId !== 'navbar' && sectionId !== 'hero') && (
                 <div className="manage-items-section" style={{ marginTop: '3rem' }}>
                     <div className="admin-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                         <h3 style={{ margin: 0 }}>Manage {sectionId.toUpperCase()} Items</h3>
@@ -437,74 +602,113 @@ const SectionEditor = () => {
                         </h4>
                         
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                            {/* Always show Title */}
                             <div className="form-group">
-                                <label>Item Name / Title</label>
+                                <label>{sectionId === 'certification' ? 'Logo Name' : 'Item Title'}</label>
                                 <input 
                                     className="form-control" 
                                     value={itemForm.title || ''} 
                                     onChange={(e) => handleItemFormChange('title', e.target.value)}
-                                    placeholder="Enter heading text"
+                                    placeholder="Heading text"
                                 />
                             </div>
+
+                            {/* Section Specific Fields */}
+                            {sectionId !== 'certification' && (
+                                <div className="form-group">
+                                    <label>
+                                        {sectionId === 'industries' ? 'Badge (e.g. CDS)' : 
+                                         sectionId === 'navbar' || sectionId === 'footer' ? 'Link URL' : 
+                                         'Category / Badge'}
+                                    </label>
+                                    <input 
+                                        className="form-control" 
+                                        value={itemForm.category || ''} 
+                                        onChange={(e) => handleItemFormChange('category', e.target.value)}
+                                        placeholder="Sub-label or Link"
+                                    />
+                                </div>
+                            )}
+
+                            {sectionId === 'industries' && (
+                                <>
+                                    <div className="form-group">
+                                        <label>Efficiency (%)</label>
+                                        <input 
+                                            className="form-control" 
+                                            value={itemForm.price || ''} 
+                                            onChange={(e) => handleItemFormChange('price', e.target.value)}
+                                            placeholder="e.g. 94"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Smart Nodes Count</label>
+                                        <input 
+                                            className="form-control" 
+                                            value={itemForm.nodes || ''} 
+                                            onChange={(e) => handleItemFormChange('nodes', e.target.value)}
+                                            placeholder="e.g. 1,000+"
+                                        />
+                                    </div>
+                                </>
+                            )}
+
+                            {(sectionId === 'products' || sectionId === 'industries') && (
+                                <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                                    <label>Description</label>
+                                    <textarea 
+                                        className="form-control" 
+                                        rows="2"
+                                        value={itemForm.description || ''} 
+                                        onChange={(e) => handleItemFormChange('description', e.target.value)}
+                                        placeholder="Details text..."
+                                    />
+                                </div>
+                            )}
+
+                            {sectionId !== 'navbar' && sectionId !== 'footer' && (
+                                <div className="form-group" style={{ gridColumn: 'span 2' }}>
+                                    <label>{sectionId === 'certification' ? 'Logo Image' : 'Item Photo'}</label>
+                                    <div className="file-upload-wrapper">
+                                        <label className="file-upload-label">
+                                            <Upload size={18} />
+                                            Upload {sectionId === 'certification' ? 'Logo' : 'Photo'}
+                                            <input 
+                                                type="file" 
+                                                className="file-upload-input" 
+                                                onChange={handleItemImageUpload} 
+                                            />
+                                        </label>
+                                        {itemForm.image && (
+                                            <button className="btn-admin" style={{ backgroundColor: '#475569' }} onClick={() => clearImage('itemFormImage')}>
+                                                Clear
+                                            </button>
+                                        )}
+                                    </div>
+                                    {itemForm.image && <img src={getPreviewUrl(itemForm.image)} className="image-preview" style={{ maxHeight: '100px' }} alt="Preview" />}
+                                </div>
+                            )}
+
+                            {/* Common Utility Fields */}
                             <div className="form-group">
-                                <label>Category / Link / Price</label>
-                                <input 
-                                    className="form-control" 
-                                    value={itemForm.category || ''} 
-                                    onChange={(e) => handleItemFormChange('category', e.target.value)}
-                                    placeholder="Add category or details"
-                                />
-                            </div>
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                                <label>Description / Subheading Details</label>
-                                <textarea 
-                                    className="form-control" 
-                                    rows="2"
-                                    value={itemForm.description || ''} 
-                                    onChange={(e) => handleItemFormChange('description', e.target.value)}
-                                    placeholder="Enter subheading text"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Visibility Status</label>
+                                <label>Visibility</label>
                                 <select 
                                     className="form-control"
                                     value={itemForm.status || 'Active'}
                                     onChange={(e) => handleItemFormChange('status', e.target.value)}
                                 >
-                                    <option value="Active">Active (Visible)</option>
-                                    <option value="Inactive">Inactive (Hidden)</option>
+                                    <option value="Active">Visible</option>
+                                    <option value="Inactive">Hidden</option>
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label>Display Sort Order</label>
+                                <label>Order</label>
                                 <input 
                                     type="number"
                                     className="form-control" 
                                     value={itemForm.sortOrder} 
                                     onChange={(e) => handleItemFormChange('sortOrder', e.target.value)}
-                                    placeholder="Enter order number"
                                 />
-                            </div>
-                            <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                                <label>Item Photo / Image</label>
-                                <div className="file-upload-wrapper">
-                                    <label className="file-upload-label">
-                                        <Upload size={18} />
-                                        Upload Item Photo
-                                        <input 
-                                            type="file" 
-                                            className="file-upload-input" 
-                                            onChange={handleItemImageUpload} 
-                                        />
-                                    </label>
-                                    {itemForm.image && (
-                                        <button className="btn-admin" style={{ backgroundColor: '#475569' }} onClick={() => clearImage('itemFormImage')}>
-                                            Clear Selected
-                                        </button>
-                                    )}
-                                </div>
-                                {itemForm.image && <img src={getPreviewUrl(itemForm.image)} className="image-preview" style={{ maxHeight: '150px' }} alt="Preview" />}
                             </div>
                         </div>
 

@@ -72,8 +72,8 @@ const Products = () => {
                 {!isViewing360 && (
                     <div className="engine-left">
                         <div className="stat-pill">
-                            <span className="stat-n">2k+</span>
-                            <span className="stat-t">Units Shipped</span>
+                            <span className="stat-n">{data?.shippedCount || '2k+'}</span>
+                            <span className="stat-t">{data?.shippedLabel || 'Units Shipped'}</span>
                         </div>
 
                         {(data?.sidebarCards && data.sidebarCards.length > 0) ? (
@@ -93,19 +93,19 @@ const Products = () => {
                         <div className="engine-features">
                             <div className="ef-item">
                                 <div className="ef-icon"><Info size={16} /></div>
-                                <span>Real-time Tracking</span>
+                                <span>{data?.feature1 || 'Real-time Tracking'}</span>
                             </div>
                             <div className="ef-item">
                                 <div className="ef-icon"><ShoppingCart size={16} /></div>
-                                <span>Volume Pricing</span>
+                                <span>{data?.feature2 || 'Volume Pricing'}</span>
                             </div>
                             <div className="ef-item">
                                 <div className="ef-icon"><Rotate3d size={16} /></div>
-                                <span>360° Inspection</span>
+                                <span>{data?.feature3 || '360° Inspection'}</span>
                             </div>
                             <div className="ef-item">
                                 <div className="ef-icon"><Plus size={16} /></div>
-                                <span>Global Logistics</span>
+                                <span>{data?.feature4 || 'Global Logistics'}</span>
                             </div>
                         </div>
                     </div>

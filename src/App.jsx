@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
 import Services from './components/Services/Services';
@@ -64,6 +64,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/connect" element={<ConnectPage />} />
+        <Route path="/admin-dashboard" element={<Navigate to="/admin" replace />} />
         
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
