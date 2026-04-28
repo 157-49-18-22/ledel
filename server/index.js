@@ -21,7 +21,12 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(cors({
-    origin: ['https://ledel.vercel.app', 'http://localhost:5173'],
+    origin: [
+        'https://ledel.vercel.app',
+        'http://localhost:5173',
+        'https://ledelenterprises.in',
+        'https://www.ledelenterprises.in'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
